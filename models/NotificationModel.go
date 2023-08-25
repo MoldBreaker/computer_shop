@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"time"
 )
 
@@ -17,4 +18,16 @@ type NotificationModel struct {
 	Content string
 	CreatedAt *time.Time
 	UserId int
+}
+
+func (NM *NotificationModel) GetTableName() string {
+	return `Notifications`
+}
+
+func(a *NotificationModel) ScanToNotificationModel(rows *sql.Rows) (*NotificationModel, error) {
+	err := rows.Scan(&a.NotificationId, &a.Content, &a.CreatedAt, a.UserId)
+	if err != nil {
+		return nil, err
+	}
+	return a, nil
 }
