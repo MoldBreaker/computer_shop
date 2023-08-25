@@ -19,14 +19,14 @@ CREATE TABLE Users (
 */
 
 type UserModel struct {
-	UserId int
-	RoleId int
-	Username string
-	Email string
-	Password string
-	Avatar string
-	Token string
-	Phone string
-	Address string
+	UserId    int
+	RoleId    int
+	Username  string
+	Email     string
+	Password  string
+	Avatar    string
+	Token     string
+	Phone     string
+	Address   string
 	CreatedAt *time.Time
 }

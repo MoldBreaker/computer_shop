@@ -2,17 +2,21 @@ package models
 
 /*
 CREATE TABLE Invoice_Detail (
-    product_id INT NOT NULL,
-    invoice_id INT NOT NULL,
-    quantity INT NULL,
-    product_price INT NULL,
-    PRIMARY KEY (product_id, invoice_id)
+   product_id INT NOT NULL,
+   invoice_id INT NOT NULL,
+   quantity INT NULL,
+   product_price INT NULL,
+   PRIMARY KEY (product_id, invoice_id)
 );
 */
 
 type InvoiceDetailModel struct {
-	ProductId int
-	InvoiceId int
-	Quantity int
+	ProductId    int
+	InvoiceId    int
+	Quantity     int
 	ProductPrice int
+}
+
+func (InvoiceDetailModel *InvoiceDetailModel) GetTableName() string {
+	return `Invoice_Detail`
 }
