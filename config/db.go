@@ -2,7 +2,6 @@ package config
 
 import (
 	"database/sql"
-	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"os"
@@ -13,6 +12,5 @@ func GetConnection() *sql.DB {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Connected Successfully")
 	return db
 }
