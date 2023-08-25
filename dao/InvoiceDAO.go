@@ -7,7 +7,31 @@ import (
 )
 
 type InvoiceDAO struct {
+}
 
+/*
+CREATE TABLE Invoices (
+    invoice_id INT NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    total_price INT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (invoice_id)
+);
+*/
+
+func (InvoiceDAO *InvoiceDAO) Create(invoice models.InvoiceModel) int {
+	db := config.GetConnection()
+	defer db.Close()
+	query := "INSERT INTO Invoices(user_id, total_price) VALUES(?, ?)"
+	result, err := db.Exec(query, invoice.UserId, invoice.TotalPrice)
+	if err != nil {
+		return -1
+	}
+	id, err := result.LastInsertId()
+	if err != nil {
+		return -1
+	}
+	return int(id)
 }
 
 func (InvoiceDAO *InvoiceDAO) FindAll() ([]models.InvoiceModel, error) {
@@ -16,7 +40,7 @@ func (InvoiceDAO *InvoiceDAO) FindAll() ([]models.InvoiceModel, error) {
 	query := "SELECT * FROM Invoices"
 	rows, err := db.Query(query)
 	if err != nil {
-		return  nil, err
+		return nil, err
 	}
 	defer rows.Close()
 	var Invoices []models.InvoiceModel
@@ -90,5 +114,3 @@ func ScanToInvoiceModel(rows *sql.Rows) (*models.InvoiceModel, error) {
 	}
 	return invoiceModel, nil
 }
-
-

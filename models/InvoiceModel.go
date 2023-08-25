@@ -1,7 +1,6 @@
 package models
 
 import (
-	"database/sql"
 	"time"
 )
 
@@ -16,20 +15,12 @@ CREATE TABLE Invoices (
 */
 
 type InvoiceModel struct {
-	InvoiceId int
-	UserId int
+	InvoiceId  int
+	UserId     int
 	TotalPrice int
-	CreatedAt *time.Time
+	CreatedAt  *time.Time
 }
 
-func(IM *InvoiceModel) GetTableName() string {
+func (IM *InvoiceModel) GetTableName() string {
 	return `Invoices`
-}
-
-func(IM *InvoiceModel) ScanToInvoiceModel(rows *sql.Rows) (*InvoiceModel, error) {
-	err := rows.Scan(&IM.InvoiceId, &IM.UserId, &IM.TotalPrice, IM.CreatedAt)
-	if err != nil {
-		return nil, err
-	}
-	return IM, nil
 }

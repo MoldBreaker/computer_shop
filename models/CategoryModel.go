@@ -1,7 +1,6 @@
 package models
 
 import (
-	"database/sql"
 	"time"
 )
 
@@ -16,20 +15,12 @@ CREATE TABLE Categories (
 */
 
 type CategoryModel struct {
-	 CategoryId int
-	 CategoryName string
-	 CreatedAt *time.Time
-	 UpdatedAt *time.Time
+	CategoryId   int
+	CategoryName string
+	CreatedAt    *time.Time
+	UpdatedAt    *time.Time
 }
 
 func (CategoryModel *CategoryModel) GetTableName() string {
 	return `Categories`
-}
-
-func (categoryModel *CategoryModel) ScanToCategoryModel(rows *sql.Rows) (*CategoryModel, error) {
-	err := rows.Scan(&categoryModel.CategoryId, &categoryModel.CategoryName, &categoryModel.CreatedAt, &categoryModel.UpdatedAt)
-	if err != nil {
-		return nil, err
-	}
-	return categoryModel, nil
 }

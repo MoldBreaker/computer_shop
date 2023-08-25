@@ -1,7 +1,6 @@
 package models
 
 import (
-	"database/sql"
 	"time"
 )
 
@@ -21,25 +20,17 @@ CREATE TABLE Products (
 */
 
 type ProductModel struct {
-	ProductId int
-	CategoryId int
+	ProductId   int
+	CategoryId  int
 	ProductName string
 	Description string
-	Price int
-	CreatedAt *time.Time
-	UpdatedAt *time.Time
-	DeletedAt *time.Time
-	IsDeleted bool
+	Price       int
+	CreatedAt   *time.Time
+	UpdatedAt   *time.Time
+	DeletedAt   *time.Time
+	IsDeleted   bool
 }
 
-func(PM *ProductModel) GetTableName() string {
+func (PM *ProductModel) GetTableName() string {
 	return `Products`
-}
-
-func(a *ProductModel) ScanToProductModel(rows *sql.Rows) (*ProductModel, error) {
-	err := rows.Scan(&a.ProductId, &a.CategoryId, &a.ProductName, &a.Description, &a.Price, &a.CreatedAt, &a.UpdatedAt, &a.DeletedAt, &a.IsDeleted)
-	if err != nil {
-		return nil, err
-	}
-	return a, nil
 }

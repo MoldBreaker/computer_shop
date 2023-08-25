@@ -1,7 +1,6 @@
 package models
 
 import (
-	"database/sql"
 	"time"
 )
 
@@ -36,12 +35,4 @@ type UserModel struct {
 
 func (UM *UserModel) GetTableName() string {
 	return `Users`
-}
-
-func(a *UserModel) ScanToUserModel(rows *sql.Rows) (*UserModel, error) {
-	err := rows.Scan(&a.UserId, &a.RoleId, &a.Username, &a.Email, &a.Password, &a.Avatar, &a.Token, &a.Phone, &a.Address, &a.CreatedAt)
-	if err != nil {
-		return nil, err
-	}
-	return a, nil
 }

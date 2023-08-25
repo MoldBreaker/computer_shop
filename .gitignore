@@ -1,2 +1,5 @@
-/computer_shop.iml
+# Ignore specific file
+computer_shop.iml
+
+# Ignore specific folder
 .idea/

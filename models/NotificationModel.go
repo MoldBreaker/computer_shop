@@ -1,7 +1,6 @@
 package models
 
 import (
-	"database/sql"
 	"time"
 )
 
@@ -15,19 +14,11 @@ import (
 
 type NotificationModel struct {
 	NotificationId int
-	Content string
-	CreatedAt *time.Time
-	UserId int
+	Content        string
+	CreatedAt      *time.Time
+	UserId         int
 }
 
 func (NM *NotificationModel) GetTableName() string {
 	return `Notifications`
-}
-
-func(a *NotificationModel) ScanToNotificationModel(rows *sql.Rows) (*NotificationModel, error) {
-	err := rows.Scan(&a.NotificationId, &a.Content, &a.CreatedAt, a.UserId)
-	if err != nil {
-		return nil, err
-	}
-	return a, nil
 }
