@@ -14,6 +14,7 @@ func (ProductImageDAO *ProductImageDAO) Create(productImage models.ProductImageM
 	defer db.Close()
 	query := "INSERT INTO Product_Images(product_id, link) values(?,?)"
 	result, err := db.Exec(query, productImage.ImageId, productImage.ProductId, productImage.Link)
+
 	if err != nil {
 		log.Fatal(err)
 	}

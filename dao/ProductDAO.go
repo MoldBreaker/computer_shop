@@ -28,7 +28,7 @@ func (ProductDAO *ProductDAO) Create(product models.ProductModel) int {
 	db := config.GetConnection()
 	defer db.Close()
 	query := "INSERT INTO Products (category_id, productname, description, price) values (?,?,?,?)"
-	result, err := db.Exec(query, product.ProductId, product.CategoryId, product.ProductName, product.Description, product.Price, product.CreatedAt, product.UpdatedAt, product.DeletedAt, product.IsDeleted)
+	result, err := db.Exec(query, product.ProductId, product.CategoryId, product.ProductName, product.Description, product.Price)
 	if err != nil {
 		log.Fatal(err)
 	}
