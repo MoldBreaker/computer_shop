@@ -42,3 +42,25 @@ func (UserDAO *UserDAO) FindAll() ([]models.UserModel, error) {
 	defer rows.Close()
 	return Users, nil
 }
+
+func (UserDAO *UserDAO) Update(user models.UserModel) bool {
+	db := config.GetConnection()
+	defer db.Close()
+	query := "UPDATE Users SET role_id = ?, user_name = ?, email = ?, password = ?, avatar = ?, token = ?, phone = ?, address = ? WHERE user_id = ?"
+	_, err := db.Exec(query, user.Username, user.Email, user.Password, user.Avatar, user.Token, user.Phone, user.Address, user.UserId)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func (UserDAO *UserDAO) Delete(id int) bool {
+	db := config.GetConnection()
+	defer db.Close()
+	query := "DELETE FROM Users WHERE id = ?"
+	_, err := db.Exec(query, id)
+	if err != nil {
+		return false
+	}
+	return true
+}

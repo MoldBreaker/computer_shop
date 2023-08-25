@@ -13,7 +13,7 @@ func (ProductImageDAO *ProductImageDAO) Create(productImage models.ProductImageM
 	db := config.GetConnection()
 	defer db.Close()
 	query := "INSERT INTO Product_Images(productid, link) values(?,?)"
-	result, err := db.Exec(query, productImage.ImageId, productImage.ProductId, productImage.Link)
+	result, err := db.Exec(query, productImage.ProductId, productImage.Link)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -37,4 +37,26 @@ func (ProductImageDAO *ProductImageDAO) FindAll() ([]models.ProductImageModel, e
 	}
 	rows.Close()
 	return ProductImages, nil
+}
+
+func (ProductImageDAO *ProductImageDAO) Update(productImage models.ProductImageModel) bool {
+	db := config.GetConnection()
+	defer db.Close()
+	query := "UPDATE Product_Images SET product_id =?, link =? WHERE image_id =?"
+	_, err := db.Exec(query, productImage.ProductId, productImage.Link, productImage.ImageId)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func (ProductImageDAO *ProductImageDAO) Delete(id int) bool {
+	db := config.GetConnection()
+	defer db.Close()
+	query := "DELETE FROM Product_Images WHERE image_id = ?"
+	_, err := db.Exec(query, id)
+	if err != nil {
+		return false
+	}
+	return true
 }
