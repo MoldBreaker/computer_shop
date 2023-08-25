@@ -1,7 +1,5 @@
 package models
 
-import "database/sql"
-
 /*
 CREATE TABLE Invoice_Detail (
     product_id INT NOT NULL,
@@ -21,12 +19,4 @@ type InvoiceDetailModel struct {
 
 func (InvoiceDetailModel *InvoiceDetailModel) GetTableName() string{
 	return `Invoice_Detail`
-}
-
-func (InvoiceDetailModel *InvoiceDetailModel) ScanToInvoiceDetailModel(rows *sql.Rows) (*InvoiceDetailModel, error) {
-	err := rows.Scan(&InvoiceDetailModel.ProductId, &InvoiceDetailModel.InvoiceId, &InvoiceDetailModel.Quantity, &InvoiceDetailModel.ProductPrice)
-	if err != nil {
-		return nil, err
-	}
-	return InvoiceDetailModel, nil
 }

@@ -1,5 +1,7 @@
 package models
 
+import "database/sql"
+
 /*
 CREATE TABLE Product_Images (
     image_id INT NOT NULL AUTO_INCREMENT,
@@ -13,4 +15,16 @@ type ProductImageModel struct {
 	ImageId int
 	ProductId int
 	Link string
+}
+
+func (PIM *ProductImageModel) GetTableName () string {
+	return `Product_Images`
+}
+
+func(a *ProductImageModel) ScanToProductImageModel(rows *sql.Rows) (*ProductImageModel, error) {
+	err := rows.Scan(&a.ImageId, &a.ProductId, &a.Link)
+	if err != nil {
+		return nil, err
+	}
+	return a, nil
 }
