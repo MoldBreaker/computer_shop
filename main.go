@@ -1,14 +1,13 @@
 package main
 
 import (
-	"github.com/labstack/echo/v4"
-	"net/http"
+	"computer_shop/config"
+	"computer_shop/routes"
+	"os"
 )
 
 func main() {
-	e := echo.New();
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello World")
-	})
-	e.Logger.Fatal(e.Start(":3000"))
+	config.LoadENV()
+	router := routes.InitWebRoutes()
+	router.Logger.Fatal(router.Start(":" + os.Getenv("PORT")))
 }
