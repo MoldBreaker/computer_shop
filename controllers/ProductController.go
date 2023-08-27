@@ -12,7 +12,8 @@ type ProductController struct {
 }
 
 var (
-	ProductSrevice services.ProductService
+	ProductImageService services.ProductImageService
+	ProductService      services.ProductService
 )
 
 func (ProductController *ProductController) GetListProducts(e echo.Context) error {
@@ -27,24 +28,42 @@ func (ProductController *ProductController) GetListProducts(e echo.Context) erro
 	search := e.QueryParam("search")
 	sort := e.QueryParam("sort")
 	col := e.QueryParam("col")
-	result := ProductSrevice.GetProductList(page, search, sort, col)
+	result := ProductService.GetProductList(page, search, sort, col)
 	if result == nil {
 		return e.String(http.StatusBadRequest, "Bad Request")
 	}
-	return e.JSON(http.StatusOK, result)
+	var responseList []models.ProductResponse
+	for i := 0; i < len(result); i++ {
+		var response models.ProductResponse
+		urls, _ := ProductImageService.GetImagesByProductId(result[i].ProductId)
+		responseList = append(responseList, response.Parse(result[i], urls))
+	}
+	return e.JSON(http.StatusOK, responseList)
 }
 
 func (ProductController *ProductController) CreateProduct(e echo.Context) error {
+	form, err := e.MultipartForm()
+	if err != nil {
+		return e.String(http.StatusBadRequest, "Not a multipart form")
+	}
+	files := form.File["images"]
 	var product models.ProductModel
 	if err := e.Bind(&product); err != nil {
 		return err
 	}
-	id := ProductSrevice.Create(product)
-	product = ProductSrevice.GetProductById(id)
+	id := ProductService.Create(product)
+	product = ProductService.GetProductById(id)
 	if product.ProductId == 0 {
-		return echo.NewHTTPError(500, "Error creating product")
+		return echo.NewHTTPError(500, "Error when create product")
+	} else {
+		result, err := ProductImageService.CreateMultipleImages(files, product.ProductId)
+		if err != nil {
+			return echo.NewHTTPError(500, result)
+		}
 	}
-	return e.JSON(200, product)
+	var response models.ProductResponse
+	urls, _ := ProductImageService.GetImagesByProductId(product.ProductId)
+	return e.JSON(200, response.Parse(product, urls))
 }
 
 func (ProductController *ProductController) GetProductById(e echo.Context) error {
@@ -53,11 +72,13 @@ func (ProductController *ProductController) GetProductById(e echo.Context) error
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Bad request")
 	}
-	product := ProductSrevice.GetProductById(id)
+	product := ProductService.GetProductById(id)
 	if product.ProductId == 0 {
 		return echo.NewHTTPError(http.StatusNotFound, "Product not found")
 	}
-	return e.JSON(http.StatusOK, product)
+	var response models.ProductResponse
+	urls, _ := ProductImageService.GetImagesByProductId(product.ProductId)
+	return e.JSON(200, response.Parse(product, urls))
 }
 
 func (ProductController *ProductController) UpdateProduct(e echo.Context) error {
@@ -71,10 +92,12 @@ func (ProductController *ProductController) UpdateProduct(e echo.Context) error 
 		return err
 	}
 	product.ProductId = id
-	if !ProductSrevice.UpdateProduct(product) {
+	if !ProductService.UpdateProduct(product) {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Error updating product")
 	}
-	return e.JSON(http.StatusOK, product)
+	var response models.ProductResponse
+	urls, _ := ProductImageService.GetImagesByProductId(product.ProductId)
+	return e.JSON(200, response.Parse(product, urls))
 }
 
 func (ProductController *ProductController) DeleteProduct(e echo.Context) error {
@@ -83,7 +106,7 @@ func (ProductController *ProductController) DeleteProduct(e echo.Context) error 
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Bad request")
 	}
-	if !ProductSrevice.DeleteProduct(id) {
+	if !ProductService.DeleteProduct(id) {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Error deleting product")
 	}
 	return e.NoContent(http.StatusOK)
