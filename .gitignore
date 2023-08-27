@@ -1,5 +1,7 @@
 # Ignore specific file
 computer_shop.iml
+test.go
+.env
 
 # Ignore specific folder
 .idea/

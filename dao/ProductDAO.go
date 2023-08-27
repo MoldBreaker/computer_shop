@@ -27,8 +27,8 @@ CREATE TABLE Products (
 func (ProductDAO *ProductDAO) Create(product models.ProductModel) int {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "INSERT INTO Products (category_id, productname, description, price) values (?,?,?,?)"
-	result, err := db.Exec(query, product.ProductId, product.CategoryId, product.ProductName, product.Description, product.Price)
+	query := "INSERT INTO Products (category_id, product_name, description, price) values (?,?,?,?)"
+	result, err := db.Exec(query, product.CategoryId, product.ProductName, product.Description, product.Price)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -70,7 +70,7 @@ func (ProductDAO *ProductDAO) Update(product models.ProductModel) error {
 	db := config.GetConnection()
 	defer db.Close()
 	query := "UPDATE Products SET category_id = ?, product_name = ?, description = ?, price = ?, deleted_at = ?, is_deleted = ? WHERE product_id = ?"
-	_, err := db.Exec(query)
+	_, err := db.Exec(query, product.CategoryId, product.ProductName, product.Description, product.Price, product.DeletedAt, product.IsDeleted, product.ProductId)
 	if err != nil {
 		return err
 	}
@@ -91,7 +91,7 @@ func (ProductDAO *ProductDAO) Delete(id int) error {
 func (ProductDAO *ProductDAO) FindByCondition(condition string) ([]models.ProductModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Products WHERE " + condition
+	query := "SELECT * FROM Products " + condition
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
