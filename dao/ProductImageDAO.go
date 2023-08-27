@@ -13,7 +13,7 @@ func (ProductImageDAO *ProductImageDAO) Create(productImage models.ProductImageM
 	db := config.GetConnection()
 	defer db.Close()
 	query := "INSERT INTO Product_Images(product_id, link) values(?,?)"
-	result, err := db.Exec(query, productImage.ImageId, productImage.ProductId, productImage.Link)
+	result, err := db.Exec(query, productImage.ProductId, productImage.Link)
 
 	if err != nil {
 		log.Fatal(err)
@@ -77,7 +77,7 @@ func (ProductImageDAO *ProductImageDAO) Update(productImage models.ProductImageM
 func (ProductImageDAO *ProductImageDAO) FindByCondition(condition string) ([]models.ProductImageModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Product_Images WHERE " + condition
+	query := "SELECT * FROM Product_Images " + condition
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
