@@ -59,19 +59,6 @@ func (UserDAO *UserDAO) FindAll() ([]models.UserModel, error) {
 	return Users, nil
 }
 
-func (UserDAO *UserDAO) FindById(id int) (models.UserModel, error) {
-	db := config.GetConnection()
-	defer db.Close()
-	query := "SELECT * FROM Users WHERE user_id =?"
-	row := db.QueryRow(query, id)
-	var user models.UserModel
-	err := row.Scan(&user.UserId, &user.RoleId, &user.Username, &user.Email, &user.Password, &user.Avatar, &user.Token, &user.Phone, &user.Address, &user.CreatedAt)
-	if err != nil {
-		return user, err
-	}
-	return user, nil
-}
-
 func (UserDAO *UserDAO) Update(user models.UserModel) error {
 	db := config.GetConnection()
 	defer db.Close()
@@ -94,23 +81,32 @@ func (UserDAO *UserDAO) Delete(id int) error {
 	return nil
 }
 
+func (UserDAO *UserDAO) FindById(id int) (models.UserModel, error) {
+	db := config.GetConnection()
+	defer db.Close()
+	query := "SELECT * FROM Users WHERE user_id =?"
+	var user models.UserModel
+	if err := db.QueryRow(query, id).Scan(&user.UserId, &user.RoleId, &user.Username, &user.Email, &user.Password, &user.Avatar, &user.Token, &user.Phone, &user.Address, &user.CreatedAt); err != nil {
+		return user, nil
+	}
+	return user, nil
+}
+
 func (UserDAO *UserDAO) FindByCondition(condition string) ([]models.UserModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Users WHERE " + condition
+	query := "SELECT * FROM Users Where" + condition
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
 	}
-	var Users []models.UserModel
+	var User []models.UserModel
 	for rows.Next() {
 		var user models.UserModel
-		err := rows.Scan(&user.UserId, &user.RoleId, &user.Username, &user.Email, &user.Password, &user.Avatar, &user.Token, &user.Phone, &user.Address, &user.CreatedAt)
-		if err != nil {
+		if err := rows.Scan(&user.UserId, &user.RoleId, &user.Username, &user.Email, &user.Password, &user.Avatar, &user.Token, &user.Phone, &user.Address, &user.CreatedAt); err != nil {
 			return nil, err
 		}
-		Users = append(Users, user)
+		User = append(User, user)
 	}
-	defer rows.Close()
-	return Users, nil
+	return User, nil
 }
