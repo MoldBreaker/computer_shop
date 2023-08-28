@@ -95,7 +95,7 @@ func (UserDAO *UserDAO) FindById(id int) (models.UserModel, error) {
 func (UserDAO *UserDAO) FindByCondition(condition string) ([]models.UserModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Users Where" + condition
+	query := "SELECT * FROM Users " + condition
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err

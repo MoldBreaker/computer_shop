@@ -9,6 +9,7 @@ import (
 
 var (
 	ProductController controllers.ProductController
+	UserController    controllers.UserController
 )
 
 func InitWebRoutes() {
@@ -29,6 +30,13 @@ func InitWebRoutes() {
 			products.PUT("/:id", ProductController.UpdateProduct)
 			products.DELETE("/:id", ProductController.DeleteProduct)
 		}
+
+		users := api.Group("/users")
+		{
+			users.POST("/register", UserController.Register)
+			users.POST("/login", UserController.Login)
+		}
+
 	}
 
 	router.Logger.Fatal(router.Start(":" + os.Getenv("PORT")))

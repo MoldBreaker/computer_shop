@@ -21,16 +21,16 @@ CREATE TABLE Users (
 */
 
 type UserModel struct {
-	UserId    int
-	RoleId    int
-	Username  string
-	Email     string
-	Password  string
-	Avatar    string
-	Token     string
-	Phone     string
-	Address   string
-	CreatedAt *time.Time
+	UserId    int        `json:"user_id" form:"user_id"`
+	RoleId    int        `json:"role_id" form:"role_id"`
+	Username  string     `json:"user_name" form:"user_name"`
+	Email     string     `json:"email" form:"email"`
+	Password  string     `json:"password" form:"password"`
+	Avatar    string     `json:"avatar" form:"avatar"`
+	Token     string     `json:"token" form:"token"`
+	Phone     string     `json:"phone" form:"phone"`
+	Address   string     `json:"address" form:"address"`
+	CreatedAt *time.Time `json:"created_at" form:"created_at"`
 }
 
 func (UM *UserModel) GetTableName() string {
