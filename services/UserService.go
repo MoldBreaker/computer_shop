@@ -31,7 +31,7 @@ func (UserService *UserService) Register(user models.UserModel) (int, string, er
 		return -1, "Error when hashing password", err
 	}
 	user.Password = hashed
-	user.RoleId = 7
+	user.RoleId = 1
 	id := UserDAO.Create(user)
 	return id, "", nil
 }
