@@ -51,3 +51,8 @@ func (UserService *UserService) Login(user models.UserModel) (models.UserModel, 
 	}
 	return userModel[0], "", nil
 }
+
+func (UserService *UserService) SetToken(user models.UserModel, token string) error {
+	user.Token = token
+	return UserDAO.Update(user)
+}

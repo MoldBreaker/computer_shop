@@ -4,7 +4,6 @@ import (
 	"computer_shop/helpers"
 	"computer_shop/models"
 	"computer_shop/services"
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )
@@ -46,7 +45,6 @@ func (UserController *UserController) Login(e echo.Context) error {
 	validatorLogin.Chain = append(validatorLogin.Chain, validatorLogin.IsEmail(user.Email, "email không hợp lệ"))
 	validatorLogin.Chain = append(validatorLogin.Chain, validatorLogin.Required(user.Password, "mật khẩu không được để trống"))
 	validatorLogin.Chain = append(validatorLogin.Chain, validatorLogin.MinLength(user.Password, 6, "mật khẩu phái có ít nhất 6 kí tự"))
-	fmt.Println(validatorLogin.Chain)
 	if err := validatorLogin.Validate(); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
@@ -61,6 +59,12 @@ func (UserController *UserController) Login(e echo.Context) error {
 	if errSession != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, errSession)
 	}
+	token := helpers.GenarateToken()
+	errSetToken := UserService.SetToken(userResult, token)
+	if errSetToken != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, errSetToken)
+	}
+	helpers.SetCookie("remember", token, e)
 	return e.JSON(http.StatusOK, userResult)
 }
 
