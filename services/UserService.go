@@ -3,7 +3,6 @@ package services
 import (
 	"computer_shop/dao"
 	"computer_shop/models"
-	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"os"
 	"strconv"
@@ -40,7 +39,6 @@ func (UserService *UserService) Register(user models.UserModel) (int, string, er
 func (UserService *UserService) Login(user models.UserModel) (models.UserModel, string, error) {
 	var userModel []models.UserModel
 	condition := "WHERE email = '" + user.Email + "'"
-	fmt.Print(condition)
 	userModel, err := UserDAO.FindByCondition(condition)
 	if err != nil {
 		return user, "error when getting user", err

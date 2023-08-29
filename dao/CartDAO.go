@@ -106,7 +106,7 @@ func (c *CartDAO) FindByCondition(condition string) ([]models.CartModel, error) 
 	db := config.GetConnection()
 	defer db.Close()
 	var carts []models.CartModel
-	rows, err := db.Query("SELECT * FORM carts " + condition)
+	rows, err := db.Query("SELECT * FROM carts " + condition)
 	if err != nil {
 		return nil, err
 	}

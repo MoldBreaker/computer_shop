@@ -42,7 +42,6 @@ func GenerateQuery(itemPerPage int, page int, search, sort, col string) string {
 func (ProductService *ProductService) GetProductList(page int, search string, sort string, col string) []models.ProductModel {
 	itemPerPageStr := os.Getenv("ITEM_PER_PAGE")
 	itemPerPage, _ := strconv.Atoi(itemPerPageStr)
-	fmt.Println(GenerateQuery(itemPerPage, page, search, sort, col))
 	result, err := ProductDAO.FindByCondition(GenerateQuery(itemPerPage, page, search, sort, col))
 	if err != nil {
 		return nil

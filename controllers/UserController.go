@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"computer_shop/helpers"
 	"computer_shop/models"
 	"computer_shop/services"
 	"github.com/labstack/echo/v4"
@@ -35,6 +36,17 @@ func (UserController *UserController) Login(e echo.Context) error {
 	if errStr != "" {
 		return echo.NewHTTPError(http.StatusBadRequest, errStr)
 	}
-
+	errSession := helpers.SetSession("user", userResult, e)
+	if errSession != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, errSession)
+	}
 	return e.JSON(http.StatusOK, userResult)
+}
+
+func (UserController *UserController) Logout(e echo.Context) error {
+	err := helpers.RemoveSession("user", e)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Bạn chưa đăng nhập")
+	}
+	return e.String(http.StatusOK, "Đăng xuất thành công")
 }

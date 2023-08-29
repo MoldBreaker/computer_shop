@@ -10,6 +10,7 @@ import (
 var (
 	ProductController controllers.ProductController
 	UserController    controllers.UserController
+	CartController    controllers.CartController
 )
 
 func InitWebRoutes() {
@@ -35,6 +36,14 @@ func InitWebRoutes() {
 		{
 			users.POST("/register", UserController.Register)
 			users.POST("/login", UserController.Login)
+			users.GET("/logout", UserController.Logout)
+		}
+
+		carts := api.Group("/carts")
+		{
+			carts.GET("/:id", CartController.AddToCart)
+			carts.GET("/update/:id", CartController.UpdateInCart)
+			carts.DELETE("/:id", CartController.DeleteInCart)
 		}
 
 	}
