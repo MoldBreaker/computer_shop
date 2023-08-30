@@ -51,3 +51,6 @@ func (UserService *UserService) Login(user models.UserModel) (models.UserModel, 
 	}
 	return userModel[0], "", nil
 }
+
+func (UserService *UserService) ResetPasswork(user models.UserModel) {
+}

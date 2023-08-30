@@ -50,3 +50,7 @@ func (UserController *UserController) Logout(e echo.Context) error {
 	}
 	return e.String(http.StatusOK, "Đăng xuất thành công")
 }
+
+func (UserController *UserController) ResetPassword(e echo.Context) {
+
+}
