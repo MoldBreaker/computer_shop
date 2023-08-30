@@ -14,6 +14,7 @@ var (
 	CartController    controllers.CartController
 	RoleController    controllers.RoleController
 	AuthMiddleware    middlewares.AuthMiddleware
+	InvoiceController controllers.InvoiceController
 )
 
 func InitWebRoutes() {
@@ -57,6 +58,11 @@ func InitWebRoutes() {
 		role := api.Group("/role")
 		{
 			role.POST("/", RoleController.CreateRole, AuthMiddleware.IsLogined, AuthMiddleware.IsSuperAdmin)
+		}
+
+		invoices := api.Group("/invoices")
+		{
+			invoices.POST("/", InvoiceController.CreateInvoice, AuthMiddleware.IsLogined)
 		}
 
 	}

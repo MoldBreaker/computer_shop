@@ -1,7 +1,7 @@
 package utils
 
 const (
-	Admin      int = 8
-	User       int = 7
-	SuperAdmin int = 9
+	Admin      int = 2
+	User       int = 1
+	SuperAdmin int = 3
 )
