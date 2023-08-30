@@ -79,6 +79,19 @@ func (Validator *Validator) IsImage(file *multipart.FileHeader) error {
 	return nil
 }
 
+func (Validator *Validator) IsPhoneNumber(value string, returnStr ...string) error {
+	phoneRegex := regexp.MustCompile(`(84|0[3|5|7|8|9])+([0-9]{8})\b`)
+	if !phoneRegex.MatchString(value) {
+		if returnStr[0] == "" {
+			return errors.New("'" + value + "' is not a valid phone number")
+		} else {
+			return errors.New(returnStr[0])
+		}
+	} else {
+		return nil
+	}
+}
+
 func (Validator *Validator) Validate() error {
 	for i := 0; i < len(Validator.Chain); i++ {
 		err := Validator.Chain[i]

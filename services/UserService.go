@@ -91,3 +91,9 @@ func (UserService *UserService) ChangeAvatar(avatar []*multipart.FileHeader, use
 	user.Avatar = urls[0]
 	return UserDAO.Update(user)
 }
+
+func (UserService *UserService) UpdateInformation(phone, address string, user models.UserModel) error {
+	user.Phone = phone
+	user.Address = address
+	return UserDAO.Update(user)
+}

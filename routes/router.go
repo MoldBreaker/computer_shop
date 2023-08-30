@@ -44,6 +44,7 @@ func InitWebRoutes() {
 			users.GET("/logout", UserController.Logout, AuthMiddleware.IsLogined)
 			users.POST("/reset-password", UserController.ResetPassword, AuthMiddleware.IsLogined)
 			users.POST("/avatar", UserController.ChangeAvatar, AuthMiddleware.IsLogined)
+			users.POST("/info", UserController.UpdateInformation, AuthMiddleware.IsLogined)
 		}
 
 		carts := api.Group("/carts")

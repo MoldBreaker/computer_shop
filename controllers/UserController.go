@@ -157,3 +157,24 @@ func (UserController *UserController) ChangeAvatar(e echo.Context) error {
 		"message": "cập nhật ảnh đại diện thành công",
 	})
 }
+
+func (UserController *UserController) UpdateInformation(e echo.Context) error {
+	phone := e.FormValue("phone")
+	address := e.FormValue("address")
+	userModel, errSession := helpers.GetSession("user", e)
+	if errSession != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Bạn chưa đăng nhập")
+	}
+	user := userModel.(models.UserModel)
+	var validator helpers.Validator
+	validator.Chain = append(validator.Chain, validator.Required(phone, "số điện thoại không được để trống"))
+	validator.Chain = append(validator.Chain, validator.Required(address, "địa chỉ không được để trống"))
+	validator.Chain = append(validator.Chain, validator.IsPhoneNumber(phone, "định dạng số điện thoại sai"))
+	if err := validator.Validate(); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err)
+	}
+	UserService.UpdateInformation(phone, address, user)
+	return e.JSON(http.StatusOK, map[string]string{
+		"message": "cập nhật thông tin thành công",
+	})
+}
