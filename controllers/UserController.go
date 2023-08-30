@@ -13,6 +13,13 @@ type UserController struct{}
 var UserService services.UserService
 
 func (UserController *UserController) Register(e echo.Context) error {
+	userSession, _ := helpers.GetSession("user", e)
+	if userSession != nil {
+		return e.JSON(http.StatusOK, map[string]string{
+			"message": "Mày đã đăng nhập",
+		})
+	}
+
 	var user models.UserModel
 	if err := e.Bind(&user); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
@@ -36,6 +43,14 @@ func (UserController *UserController) Register(e echo.Context) error {
 }
 
 func (UserController *UserController) Login(e echo.Context) error {
+	//userSession, _ := helpers.GetSession("user", e)
+	//fmt.Println(userSession)
+	//if userSession != nil {
+	//	return e.JSON(200, map[string]string{
+	//		"message": "Mày đã đăng nhập",
+	//	})
+	//}
+
 	var user models.UserModel
 	if err := e.Bind(&user); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
@@ -73,11 +88,72 @@ func (UserController *UserController) Logout(e echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Bạn chưa đăng nhập")
 	}
+	errCookie := helpers.RemoveCookie("remember", e)
+	if errCookie != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Bạn chưa đăng nhập")
+	}
 	return e.JSON(http.StatusOK, map[string]string{
 		"message": "Đăng xuất thành công",
 	})
 }
 
-func (UserController *UserController) ResetPassword(e echo.Context) {
+func (UserController *UserController) ResetPassword(e echo.Context) error {
+	oldPassword := e.FormValue("old_password")
+	newPassword := e.FormValue("new_password")
+	confirmNewPassword := e.FormValue("confirm_new_password")
+	var validatorChangePassword helpers.Validator
+	validatorChangePassword.Chain = append(validatorChangePassword.Chain, validatorChangePassword.Required(oldPassword, "mật khẩu cũ không được để trống"))
+	validatorChangePassword.Chain = append(validatorChangePassword.Chain, validatorChangePassword.Required(newPassword, "mật khẩu mới không được để trống"))
+	validatorChangePassword.Chain = append(validatorChangePassword.Chain, validatorChangePassword.MinLength(oldPassword, 6, "mật khẩu cũ phái có ít nhất 6 kí tự"))
+	validatorChangePassword.Chain = append(validatorChangePassword.Chain, validatorChangePassword.MinLength(newPassword, 6, "mật khẩu mới phái có ít nhất 6 kí tự"))
+	validatorChangePassword.Chain = append(validatorChangePassword.Chain, validatorChangePassword.ComfirmPassword(newPassword, confirmNewPassword, "hai mật khẩu không trùng nhau"))
+	err := validatorChangePassword.Validate()
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err)
+	}
+	userModel, errSession := helpers.GetSession("user", e)
+	if errSession != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Bạn chưa đăng nhập")
+	}
+	user := userModel.(models.UserModel)
+	errChangePass := UserService.ResetPassword(oldPassword, newPassword, user)
+	if errChangePass != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, errChangePass)
+	}
+	return e.JSON(http.StatusOK, map[string]string{
+		"message": "Đổi mật khẩu thành công",
+	})
+}
 
+func (UserController *UserController) ChangeAvatar(e echo.Context) error {
+	form, err := e.MultipartForm()
+	if err != nil {
+		return e.String(http.StatusBadRequest, "Not a multipart form")
+	}
+	files := form.File["avatar"]
+	if len(files) == 0 {
+		return echo.NewHTTPError(http.StatusBadRequest, "Không có hình ảnh được chọn")
+	}
+	if len(files) > 1 {
+		return echo.NewHTTPError(http.StatusBadRequest, "không được truyền quá 1 bức ảnh")
+	}
+	var valiadatorImage helpers.Validator
+	valiadatorImage.Chain = append(valiadatorImage.Chain, valiadatorImage.Required(files[0].Filename, "Hình ảnh không được để trống"))
+	valiadatorImage.Chain = append(valiadatorImage.Chain, valiadatorImage.IsImage(files[0]))
+	errValidate := valiadatorImage.Validate()
+	if errValidate != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, errValidate)
+	}
+	userModel, errSession := helpers.GetSession("user", e)
+	if errSession != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Bạn chưa đăng nhập")
+	}
+	user := userModel.(models.UserModel)
+	errChangeImage := UserService.ChangeAvatar(files, user)
+	if errChangeImage != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, errChangeImage)
+	}
+	return e.JSON(http.StatusOK, map[string]string{
+		"message": "cập nhật ảnh đại diện thành công",
+	})
 }

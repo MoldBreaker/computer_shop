@@ -7,8 +7,8 @@ package models
 );*/
 
 type RoleModel struct {
-	RoleId   int
-	RoleName string
+	RoleId   int    `json:"role_id" form:"role_id"`
+	RoleName string `json:"role_name" form:"role_name"`
 }
 
 func (RM *RoleModel) GetTableName() string {

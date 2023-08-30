@@ -22,3 +22,13 @@ func GetCookie(key string, e echo.Context) (string, error) {
 	}
 	return cookie.Value, err
 }
+
+func RemoveCookie(key string, e echo.Context) error {
+	cookie := new(http.Cookie)
+	cookie.Name = key
+	cookie.Value = ""
+	cookie.Path = "/"
+	cookie.Expires = time.Now().Add(-1)
+	e.SetCookie(cookie)
+	return nil
+}
