@@ -31,7 +31,7 @@ func (UserService *UserService) Register(user models.UserModel) (int, string, er
 		return -1, "Error when hashing password", err
 	}
 	user.Password = hashed
-	user.RoleId = 7
+	user.RoleId = 1
 	id := UserDAO.Create(user)
 	return id, "", nil
 }
@@ -52,5 +52,7 @@ func (UserService *UserService) Login(user models.UserModel) (models.UserModel, 
 	return userModel[0], "", nil
 }
 
-func (UserService *UserService) ResetPasswork(user models.UserModel) {
+func (UserService *UserService) SetToken(user models.UserModel, token string) error {
+	user.Token = token
+	return UserDAO.Update(user)
 }

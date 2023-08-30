@@ -2,6 +2,7 @@
 computer_shop.iml
 test.go
 .env
+Echo
 
 # Ignore specific folder
 .idea/
