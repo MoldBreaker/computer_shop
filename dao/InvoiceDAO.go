@@ -97,11 +97,11 @@ func (InvoiceDAO *InvoiceDAO) FindByCondition(condition string) ([]models.Invoic
 	}
 	var invoices []models.InvoiceModel
 	for rows.Next() {
-		invoice, err := ScanToInvoiceModel(rows)
-		if err != nil {
+		var invoice models.InvoiceModel
+		if err := rows.Scan(&invoice.InvoiceId, &invoice.UserId, &invoice.TotalPrice, &invoice.CreatedAt); err != nil {
 			return nil, err
 		}
-		invoices = append(invoices, *invoice)
+		invoices = append(invoices, invoice)
 	}
 	return invoices, nil
 }

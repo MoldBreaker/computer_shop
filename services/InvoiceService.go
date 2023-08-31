@@ -4,6 +4,7 @@ import (
 	"computer_shop/dao"
 	"computer_shop/models"
 	"errors"
+	"fmt"
 )
 
 type InvoiceService struct {
@@ -35,4 +36,13 @@ func (InvoiceService *InvoiceService) Create(userModel models.UserModel, cartDat
 		TotalPrice: sum,
 	}
 	return InvoiceDAO.Update(invoiceResult)
+}
+
+func (InvoiceService *InvoiceService) GetHistoryInvoices(user models.UserModel) ([]models.InvoiceModel, error) {
+	query := fmt.Sprintf("WHERE user_id = %d", user.UserId)
+	return InvoiceDAO.FindByCondition(query)
+}
+
+func (InvoiceService *InvoiceService) GetInvoiceDetails(invoice_id int) (models.InvoiceModel, error) {
+	return InvoiceDAO.FindById(invoice_id)
 }

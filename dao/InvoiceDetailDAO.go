@@ -7,7 +7,6 @@ import (
 )
 
 type InvoiceDetailDAO struct {
-
 }
 
 func (InvoiceDetailDAO *InvoiceDetailDAO) FindById(id int) (models.InvoiceDetailModel, error) {
@@ -40,7 +39,7 @@ func ScanToInvoiceDetail(rows *sql.Rows) (*models.InvoiceDetailModel, error) {
 	return InvoiceDetail, nil
 }
 
-func (InvoiceDetailDAO *InvoiceDetailDAO) FindAll() ([]models.InvoiceDetailModel,error) {
+func (InvoiceDetailDAO *InvoiceDetailDAO) FindAll() ([]models.InvoiceDetailModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
 	query := "SELECT * FROM Invoice_Detail"
@@ -92,11 +91,11 @@ func (InvoiceDetailDAO *InvoiceDetailDAO) FindByCondition(condition string) ([]m
 	}
 	var InvoiceDetails []models.InvoiceDetailModel
 	for rows.Next() {
-		invoiceDetail, err := ScanToInvoiceDetail(rows)
-		if err != nil {
+		var InvoiceDetail models.InvoiceDetailModel
+		if err := rows.Scan(&InvoiceDetail.ProductId, &InvoiceDetail.InvoiceId, &InvoiceDetail.Quantity, &InvoiceDetail.ProductPrice); err != nil {
 			return nil, err
 		}
-		InvoiceDetails = append(InvoiceDetails, *invoiceDetail)
+		InvoiceDetails = append(InvoiceDetails, InvoiceDetail)
 	}
 	return InvoiceDetails, nil
 }

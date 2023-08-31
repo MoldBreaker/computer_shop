@@ -17,6 +17,12 @@ type InvoiceDetailModel struct {
 	ProductPrice int
 }
 
+type InvoiceDetailResponseModel struct {
+	Product      ProductResponse
+	Quantity     int
+	ProductPrice int
+}
+
 func (InvoiceDetailModel *InvoiceDetailModel) GetTableName() string {
 	return `Invoice_Detail`
 }

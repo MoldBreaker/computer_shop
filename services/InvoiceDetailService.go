@@ -4,6 +4,7 @@ import (
 	"computer_shop/dao"
 	"computer_shop/models"
 	"errors"
+	"fmt"
 )
 
 type InvoiceDetailService struct {
@@ -30,4 +31,9 @@ func (InvoiceDetailService *InvoiceDetailService) Create(invoiceId, productId, q
 		return 0, errors.New("không thể lưu sản phẩm trong chi tiết hóa đơn")
 	}
 	return price, nil
+}
+
+func (InvoiceDetailService *InvoiceDetailService) GetHistoryInvoiceDetails(invoice_id int) ([]models.InvoiceDetailModel, error) {
+	query := fmt.Sprintf("WHERE invoice_id = %d", invoice_id)
+	return InvoiceDetailDAO.FindByCondition(query)
 }

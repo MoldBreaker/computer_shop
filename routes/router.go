@@ -50,9 +50,9 @@ func InitWebRoutes() {
 
 		carts := api.Group("/carts")
 		{
-			carts.GET("/:id", CartController.AddToCart)
-			carts.GET("/update/:id", CartController.UpdateInCart)
-			carts.DELETE("/:id", CartController.DeleteInCart)
+			carts.GET("/:id", CartController.AddToCart, AuthMiddleware.IsLogined)
+			carts.GET("/update/:id", CartController.UpdateInCart, AuthMiddleware.IsLogined)
+			carts.DELETE("/:id", CartController.DeleteInCart, AuthMiddleware.IsLogined)
 		}
 
 		role := api.Group("/role")
@@ -63,6 +63,8 @@ func InitWebRoutes() {
 		invoices := api.Group("/invoices")
 		{
 			invoices.POST("/", InvoiceController.CreateInvoice, AuthMiddleware.IsLogined)
+			invoices.GET("/", InvoiceController.GetHistoryInvoices, AuthMiddleware.IsLogined)
+			invoices.GET("/:id", InvoiceController.GetHistoryInvoiceDetails, AuthMiddleware.IsLogined)
 		}
 
 	}
