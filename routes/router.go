@@ -9,12 +9,13 @@ import (
 )
 
 var (
-	ProductController controllers.ProductController
-	UserController    controllers.UserController
-	CartController    controllers.CartController
-	RoleController    controllers.RoleController
-	AuthMiddleware    middlewares.AuthMiddleware
-	InvoiceController controllers.InvoiceController
+	ProductController      controllers.ProductController
+	UserController         controllers.UserController
+	CartController         controllers.CartController
+	RoleController         controllers.RoleController
+	AuthMiddleware         middlewares.AuthMiddleware
+	InvoiceController      controllers.InvoiceController
+	NotificationController controllers.NotificationController
 )
 
 func InitWebRoutes() {
@@ -65,6 +66,12 @@ func InitWebRoutes() {
 			invoices.POST("/", InvoiceController.CreateInvoice, AuthMiddleware.IsLogined)
 			invoices.GET("/", InvoiceController.GetHistoryInvoices, AuthMiddleware.IsLogined)
 			invoices.GET("/:id", InvoiceController.GetHistoryInvoiceDetails, AuthMiddleware.IsLogined)
+		}
+
+		notifications := api.Group("/notifications")
+		{
+			notifications.GET("/", NotificationController.GetAllNotifications, AuthMiddleware.IsLogined)
+			notifications.DELETE("/:id", NotificationController.DelateNotification, AuthMiddleware.IsLogined)
 		}
 
 	}
