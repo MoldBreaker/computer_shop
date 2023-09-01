@@ -15,17 +15,17 @@ var (
 	RoleController    controllers.RoleController
 	AuthMiddleware    middlewares.AuthMiddleware
 	InvoiceController controllers.InvoiceController
+	HomeController    controllers.HomeController
 )
 
 func InitWebRoutes() {
 	router := echo.New()
 	config.LoadENV()
+	router.Static("/", "assets")
 
 	router.Use(AuthMiddleware.Auth)
 
-	router.GET("/", func(c echo.Context) error {
-		return c.String(200, "Hello World")
-	})
+	router.GET("/", HomeController.RenderHomePage)
 
 	api := router.Group("/api")
 	{
