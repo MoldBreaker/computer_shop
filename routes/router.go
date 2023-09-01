@@ -9,6 +9,7 @@ import (
 )
 
 var (
+<<<<<<< HEAD
 	ProductController controllers.ProductController
 	UserController    controllers.UserController
 	CartController    controllers.CartController
@@ -16,6 +17,15 @@ var (
 	AuthMiddleware    middlewares.AuthMiddleware
 	InvoiceController controllers.InvoiceController
 	HomeController    controllers.HomeController
+=======
+	ProductController      controllers.ProductController
+	UserController         controllers.UserController
+	CartController         controllers.CartController
+	RoleController         controllers.RoleController
+	AuthMiddleware         middlewares.AuthMiddleware
+	InvoiceController      controllers.InvoiceController
+	NotificationController controllers.NotificationController
+>>>>>>> 941a18cb889d35995658efd6c97a654a2b21b481
 )
 
 func InitWebRoutes() {
@@ -65,6 +75,12 @@ func InitWebRoutes() {
 			invoices.POST("/", InvoiceController.CreateInvoice, AuthMiddleware.IsLogined)
 			invoices.GET("/", InvoiceController.GetHistoryInvoices, AuthMiddleware.IsLogined)
 			invoices.GET("/:id", InvoiceController.GetHistoryInvoiceDetails, AuthMiddleware.IsLogined)
+		}
+
+		notifications := api.Group("/notifications")
+		{
+			notifications.GET("/", NotificationController.GetAllNotifications, AuthMiddleware.IsLogined)
+			notifications.DELETE("/:id", NotificationController.DelateNotification, AuthMiddleware.IsLogined)
 		}
 
 	}

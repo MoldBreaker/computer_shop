@@ -14,6 +14,7 @@ type ProductController struct {
 var (
 	ProductImageService services.ProductImageService
 	ProductService      services.ProductService
+	NotificationService services.NotificationService
 )
 
 func (ProductController *ProductController) GetListProducts(e echo.Context) error {
@@ -63,6 +64,12 @@ func (ProductController *ProductController) CreateProduct(e echo.Context) error 
 	}
 	var response models.ProductResponse
 	urls, _ := ProductImageService.GetImagesByProductId(product.ProductId)
+
+	//Send notifiactions
+	if err := NotificationService.SendNotificationsToAllUser(product.ProductName + " đã được thêm vào cửa hàng"); err != nil {
+		return echo.NewHTTPError(500, err)
+	}
+
 	return e.JSON(200, response.Parse(product, urls))
 }
 
