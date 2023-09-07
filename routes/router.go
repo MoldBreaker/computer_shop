@@ -9,23 +9,14 @@ import (
 )
 
 var (
-<<<<<<< HEAD
-	ProductController controllers.ProductController
-	UserController    controllers.UserController
-	CartController    controllers.CartController
-	RoleController    controllers.RoleController
-	AuthMiddleware    middlewares.AuthMiddleware
-	InvoiceController controllers.InvoiceController
-	HomeController    controllers.HomeController
-=======
 	ProductController      controllers.ProductController
 	UserController         controllers.UserController
 	CartController         controllers.CartController
 	RoleController         controllers.RoleController
 	AuthMiddleware         middlewares.AuthMiddleware
 	InvoiceController      controllers.InvoiceController
+	HomeController         controllers.HomeController
 	NotificationController controllers.NotificationController
->>>>>>> 941a18cb889d35995658efd6c97a654a2b21b481
 )
 
 func InitWebRoutes() {
@@ -36,7 +27,7 @@ func InitWebRoutes() {
 	router.Use(AuthMiddleware.Auth)
 
 	router.GET("/", HomeController.RenderHomePage)
-
+	router.GET("/auth", HomeController.RenderAuthPage)
 	api := router.Group("/api")
 	{
 		products := api.Group("/products")

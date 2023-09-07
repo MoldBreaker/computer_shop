@@ -11,3 +11,8 @@ func (HomeController *HomeController) RenderHomePage(e echo.Context) error {
 	tmpl := template.Must(template.ParseFiles("views/home.html"))
 	return tmpl.Execute(e.Response(), nil)
 }
+
+func (HomeController *HomeController) RenderAuthPage(e echo.Context) error {
+	tmpl := template.Must(template.ParseFiles("views/Auth.html"))
+	return tmpl.Execute(e.Response(), nil)
+}
