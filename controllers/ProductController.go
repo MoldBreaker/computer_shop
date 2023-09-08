@@ -30,8 +30,10 @@ func (ProductController *ProductController) GetListProducts(e echo.Context) erro
 	sort := e.QueryParam("sort")
 	col := e.QueryParam("col")
 	result := ProductService.GetProductList(page, search, sort, col)
-	if result == nil {
-		return e.String(http.StatusBadRequest, "Bad Request")
+	if len(result) == 0 {
+		return e.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": "You have no results",
+		})
 	}
 	var responseList []models.ProductResponse
 	for i := 0; i < len(result); i++ {
@@ -39,7 +41,11 @@ func (ProductController *ProductController) GetListProducts(e echo.Context) erro
 		urls, _ := ProductImageService.GetImagesByProductId(result[i].ProductId)
 		responseList = append(responseList, response.Parse(result[i], urls))
 	}
-	return e.JSON(http.StatusOK, responseList)
+	resLength := ProductService.GetProductsLength(search, sort, col)
+	return e.JSON(http.StatusOK, map[string]interface{}{
+		"products":  responseList,
+		"maxLength": resLength,
+	})
 }
 
 func (ProductController *ProductController) CreateProduct(e echo.Context) error {

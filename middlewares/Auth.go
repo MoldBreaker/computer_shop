@@ -15,11 +15,13 @@ type AuthMiddleware struct {
 func (AuthMiddleware *AuthMiddleware) Auth(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cookie, _ := helpers.GetCookie("remember", c)
-		var UserDAO dao.UserDAO
-		query := "WHERE token = '" + cookie + "'"
-		result, _ := UserDAO.FindByCondition(query)
-		if len(result) > 0 {
-			helpers.SetSession("user", result[0], c)
+		if cookie != "" {
+			var UserDAO dao.UserDAO
+			query := "WHERE token = '" + cookie + "'"
+			result, _ := UserDAO.FindByCondition(query)
+			if len(result) > 0 {
+				helpers.SetSession("user", result[0], c)
+			}
 		}
 		return next(c)
 	}
