@@ -16,7 +16,7 @@ var (
 	ProductDAO dao.ProductDAO
 )
 
-func GenerateQuery(itemPerPage int, page int, search, sort, col string) string {
+func GenerateQuery(itemPerPage int, page int, search, sort, col string, categoryId int) string {
 
 	query := ""
 
@@ -25,6 +25,10 @@ func GenerateQuery(itemPerPage int, page int, search, sort, col string) string {
 		query += fmt.Sprintf(" WHERE is_deleted = false AND product_name LIKE '%%%s%%'", search)
 	} else {
 		query += fmt.Sprintf(" WHERE is_deleted = false")
+	}
+
+	if categoryId > 0 {
+		query += fmt.Sprintf(" AND category_id = %d", categoryId)
 	}
 
 	// Sorting
@@ -39,7 +43,7 @@ func GenerateQuery(itemPerPage int, page int, search, sort, col string) string {
 	return query
 }
 
-func GenerateQueryNotPaging(search, sort, col string) string {
+func GenerateQueryNotPaging(search, sort, col string, categoryId int) string {
 
 	query := ""
 
@@ -50,6 +54,10 @@ func GenerateQueryNotPaging(search, sort, col string) string {
 		query += fmt.Sprintf(" WHERE is_deleted = false")
 	}
 
+	if categoryId > 0 {
+		query += fmt.Sprintf(" AND category_id = %d", categoryId)
+	}
+
 	// Sorting
 	if sort != "" && col != "" {
 		query += fmt.Sprintf(" ORDER BY %s %s", col, sort)
@@ -58,18 +66,18 @@ func GenerateQueryNotPaging(search, sort, col string) string {
 	return query
 }
 
-func (ProductService *ProductService) GetProductList(page int, search string, sort string, col string) []models.ProductModel {
+func (ProductService *ProductService) GetProductList(page int, search string, sort string, col string, categoryId int) []models.ProductModel {
 	itemPerPageStr := os.Getenv("ITEM_PER_PAGE")
 	itemPerPage, _ := strconv.Atoi(itemPerPageStr)
-	result, err := ProductDAO.FindByCondition(GenerateQuery(itemPerPage, page, search, sort, col))
+	result, err := ProductDAO.FindByCondition(GenerateQuery(itemPerPage, page, search, sort, col, categoryId))
 	if err != nil {
 		return result
 	}
 	return result
 }
 
-func (ProductService *ProductService) GetProductsLength(search string, sort string, col string) int {
-	result, err := ProductDAO.FindByCondition(GenerateQueryNotPaging(search, sort, col))
+func (ProductService *ProductService) GetProductsLength(search string, sort string, col string, categoryId int) int {
+	result, err := ProductDAO.FindByCondition(GenerateQueryNotPaging(search, sort, col, categoryId))
 	if err != nil {
 		return -1
 	}

@@ -7,7 +7,6 @@ $.ajax({
   url: "/api/products/" + match[1],
   dataType: "JSON",
   success: function (data) {
-    console.log(data);
     let imagesHTML = "";
     for(let i=0;i<data.images.length;i++){
       imagesHTML += `

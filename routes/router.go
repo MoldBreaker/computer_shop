@@ -18,6 +18,7 @@ var (
 	InvoiceController      controllers.InvoiceController
 	HomeController         controllers.HomeController
 	NotificationController controllers.NotificationController
+	CategoryController     controllers.CategoryController
 )
 
 func InitWebRoutes() {
@@ -77,6 +78,10 @@ func InitWebRoutes() {
 			notifications.DELETE("/:id", NotificationController.DelateNotification, AuthMiddleware.IsLogined)
 		}
 
+		categories := api.Group("/categories")
+		{
+			categories.GET("/", CategoryController.GetAllCategory)
+		}
 	}
 
 	router.Logger.Fatal(router.Start(":" + os.Getenv("PORT")))

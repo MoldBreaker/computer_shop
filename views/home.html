@@ -26,6 +26,11 @@
     <link href="/home/styles.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <link rel="stylesheet" href="/home/searchbar.css" />
+    <style>
+      a {
+        text-decoration: none;
+      }
+    </style>
   </head>
   <body>
     <!-- Navigation-->
@@ -127,6 +132,10 @@
 
     <div id="search-bar">
       <div class="dropdown">
+        <button onclick="showCategories()" class="dropbtn">Category</button>
+        <div id="categories-dropdown" class="dropdown-content"></div>
+      </div>
+      <div class="dropdown">
         <button onclick="myFunction()" class="dropbtn">Choose according</button>
         <div id="myDropdown" class="dropdown-content">
           <a class="sort-li" href="#" data-col="product_name" data-sort="DESC"
@@ -145,7 +154,7 @@
       </div>
       <input
         type="text"
-        placeholder="Search.."
+        placeholder="What are you looking for?"
         name="search"
         id="search-value"
       />
@@ -155,15 +164,6 @@
       <br />
       <span class="text-warning" id="search-warning"></span>
     </div>
-    <input
-      type="text"
-      placeholder="What are you looking for?"
-      name="search"
-      id="search-value"
-    />
-    <button id="search-btn" type="submit"><i class="fa fa-search"></i></button>
-    <br />
-    <span class="text-warning" id="search-warning"></span>
 
     <!-- Section-->
     <section class="py-5">

@@ -3,9 +3,10 @@ package controllers
 import (
 	"computer_shop/models"
 	"computer_shop/services"
-	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"
+
+	"github.com/labstack/echo/v4"
 )
 
 type ProductController struct {
@@ -29,7 +30,23 @@ func (ProductController *ProductController) GetListProducts(e echo.Context) erro
 	search := e.QueryParam("search")
 	sort := e.QueryParam("sort")
 	col := e.QueryParam("col")
-	result := ProductService.GetProductList(page, search, sort, col)
+	categoryIdStr := e.QueryParam("categoryId")
+	var categoryId int
+	if categoryIdStr != "" {
+		id, err := strconv.Atoi(categoryIdStr)
+		if err != nil {
+			return e.JSON(http.StatusBadRequest, map[string]interface{}{
+				"message": "Invalid category id",
+			})
+		}
+		categoryId = id
+	}
+	if categoryIdStr != "" && categoryId < 1 {
+		return e.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": "Invalid can not be negative",
+		})
+	}
+	result := ProductService.GetProductList(page, search, sort, col, categoryId)
 	if len(result) == 0 {
 		return e.JSON(http.StatusBadRequest, map[string]interface{}{
 			"message": "You have no results",
@@ -41,7 +58,7 @@ func (ProductController *ProductController) GetListProducts(e echo.Context) erro
 		urls, _ := ProductImageService.GetImagesByProductId(result[i].ProductId)
 		responseList = append(responseList, response.Parse(result[i], urls))
 	}
-	resLength := ProductService.GetProductsLength(search, sort, col)
+	resLength := ProductService.GetProductsLength(search, sort, col, categoryId)
 	return e.JSON(http.StatusOK, map[string]interface{}{
 		"products":  responseList,
 		"maxLength": resLength,

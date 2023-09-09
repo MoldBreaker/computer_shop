@@ -13,8 +13,22 @@ let searchBtn = document.querySelector("#search-btn")
 let sortBtnList = document.querySelectorAll(".sort-li")
 let col = ""
 let sort = ""
+let categoryId = ""
 
 $(document).ready(function () {
+
+    $.ajax({
+        type: "GET",
+        url: "/api/categories/",
+        dataType: "JSON",
+        success: function (data) {
+            let html = ''
+            for(let i=0;i<data.categories.length;i++){
+                html += `<a class="category-li" onclick="findByCategoryId(this)" data-id="${data.categories[i].CategoryId}">${data.categories[i].CategoryName}</a>`
+            }
+            document.getElementById("categories-dropdown").innerHTML = html;
+        }
+    });
 
     for(let i=0;i<sortBtnList.length;i++){
         sortBtnList[i].onclick = (e) =>{
@@ -26,6 +40,7 @@ $(document).ready(function () {
             renderListProducts();
         }
     }
+
     renderListProducts();
     searchBtn.onclick = function () {
         let searchValue = document.getElementById("search-value").value;
@@ -126,6 +141,16 @@ document.addEventListener("keypress", function(event) {
 
 function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
+}
+
+function showCategories() {
+    document.getElementById("categories-dropdown").classList.toggle("show");
+}
+
+function findByCategoryId(e) {
+    categoryId = e.dataset.id;
+    params.set("categoryId", categoryId);
+    renderListProducts();
 }
 
 // Close the dropdown if the user clicks outside of it
