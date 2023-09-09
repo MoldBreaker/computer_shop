@@ -7,10 +7,11 @@ import (
 	"computer_shop/utils"
 	"errors"
 	"fmt"
-	"golang.org/x/crypto/bcrypt"
 	"mime/multipart"
 	"os"
 	"strconv"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService struct {
@@ -30,7 +31,16 @@ func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
+
 func (UserService *UserService) Register(user models.UserModel) (int, string, error) {
+	condition := fmt.Sprintf("WHERE email = '%s'", user.Email)
+	result, err := UserDAO.FindByCondition(condition)
+	if err != nil {
+		return -1, "Error when getting user", err
+	}
+	if len(result) > 0 {
+		return -1, "Email already registered", err
+	}
 	hashed, err := HashPassword(user.Password)
 	if err != nil {
 		return -1, "Error when hashing password", err
@@ -67,13 +77,13 @@ func (UserService *UserService) ResetPassword(password, newPassword string, user
 	condition := fmt.Sprintf("WHERE email = '%s' AND user_id = %d", user.Email, user.UserId)
 	userModel, err := UserDAO.FindByCondition(condition)
 	if err != nil {
-		return errors.New("Internal Server")
+		return errors.New("internal Server")
 	}
 	if len(userModel) == 0 {
-		return errors.New("không thể tìm thấy user")
+		return errors.New("can not find user")
 	}
 	if !CheckPasswordHash(password, userModel[0].Password) {
-		return errors.New("password không đúng")
+		return errors.New("incorrect password")
 	}
 	hashed, _ := HashPassword(newPassword)
 	user.Password = hashed
@@ -82,7 +92,7 @@ func (UserService *UserService) ResetPassword(password, newPassword string, user
 
 func (UserService *UserService) ChangeAvatar(avatar []*multipart.FileHeader, user models.UserModel) error {
 	if len(avatar) == 0 {
-		return errors.New("phải cập nhật avatar")
+		return errors.New("must upload an image")
 	}
 	urls, errStr, err := helpers.UploadFiles(avatar)
 	if err != nil {

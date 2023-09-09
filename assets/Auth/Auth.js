@@ -130,6 +130,7 @@ signupBtn.onclick = (e =>{
             password: password,
             cpassword: cpassword
         },success: function(data) {
+            console.log(data);
             Switcher();
         },error: function(err) {
             if(err.status == 400){

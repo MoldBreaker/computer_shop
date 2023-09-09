@@ -4,8 +4,9 @@ import (
 	"computer_shop/config"
 	"computer_shop/controllers"
 	"computer_shop/middlewares"
-	"github.com/labstack/echo/v4"
 	"os"
+
+	"github.com/labstack/echo/v4"
 )
 
 var (
@@ -28,6 +29,8 @@ func InitWebRoutes() {
 
 	router.GET("/", HomeController.RenderHomePage)
 	router.GET("/auth", HomeController.RenderAuthPage)
+	router.GET("/product/detail/:id", HomeController.RenderProductDetailPage)
+
 	api := router.Group("/api")
 	{
 		products := api.Group("/products")

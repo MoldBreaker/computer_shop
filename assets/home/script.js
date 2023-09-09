@@ -59,7 +59,11 @@ const renderListProducts = () => {
                         <div class="card-body p-4">
                             <div class="text-center">
                                 <!-- Product name-->
-                                <h5 class="fw-bolder">${data[i].product_name}</h5>
+                                <a class="product-detail-link" href="/product/detail/${data[i].product_id}">
+                                    <h5 class="fw-bolder">
+                                        ${data[i].product_name}
+                                    </h5>
+                                </a>
                                 <!-- Product price-->
                                 ${formatMoney(data[i].price)}₫
                             </div>
