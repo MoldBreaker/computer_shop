@@ -6,7 +6,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Computer Shop</title>
-    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dapvdplse/image/upload/v1694143165/Images_Shop/0Zrzz4rRBNY_p2ZIqZNjg.jpg">
+    <link rel="icon" type="image/x-icon" href="/Auth/img/logo.png">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="home/dropdown.css"/>
@@ -22,7 +22,7 @@
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container px-4 px-lg-5">
-        <a class="navbar-brand" href="/">Start Bootstrap</a>
+        <a class="navbar-brand" href="/"><img src="/Auth/img/logo.png" style="width: 65px; height: 35px; border-radius: 30%"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
@@ -68,7 +68,7 @@
 <header class="bg-dark py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Shop in style</h1>
+            <h1 class="display-4 fw-bolder">Welcome to ComputerShop</h1>
             <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
         </div>
     </div>
@@ -76,7 +76,7 @@
 
 <div id="search-bar">
     <div class="dropdown">
-        <button onclick="myFunction()" class="dropbtn">Sort</button>
+        <button onclick="myFunction()" class="dropbtn">Choose according</button>
         <div id="myDropdown" class="dropdown-content">
             <a class="sort-li" href="#" data-col="product_name" data-sort="DESC">Decrease by name</a>
             <a class="sort-li" href="#" data-col="product_name" data-sort="ASC">Increase by name</a>
@@ -84,7 +84,7 @@
             <a class="sort-li" href="#" data-col="price" data-sort="ASC">Increase by price</a>
         </div>
     </div>
-    <input type="text" placeholder="Search.." name="search" id="search-value">
+    <input type="text" placeholder="What are you looking for?" name="search" id="search-value">
     <button id="search-btn" type="submit"><i class="fa fa-search"></i></button> <br/>
     <span class="text-warning" id="search-warning"></span>
 
