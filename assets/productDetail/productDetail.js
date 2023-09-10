@@ -4,6 +4,18 @@ var match = url.match(/\/(\d+)\/?$/);
 
 $.ajax({
   type: "GET",
+  url: "/api/carts/",
+  dataType: "JSON",
+  success: function (data) {
+      document.getElementById('cart-count').innerHTML = data.length;
+  },
+  error: function (jqXHR){
+      document.getElementById('cart-count').innerHTML = 0;
+  }
+});
+
+$.ajax({
+  type: "GET",
   url: "/api/products/" + match[1],
   dataType: "JSON",
   success: function (data) {
@@ -68,6 +80,18 @@ function addTocart(e) {
       url: "/api/carts/" + e.dataset.id,
       dataType: "JSON",
       success: function (response) {
+        $.ajax({
+            type: "GET",
+            url: "/api/carts/",
+            dataType: "JSON",
+            success: function (data) {
+                document.getElementById('cart-count').innerHTML = data.length;
+            },
+            error: function (jqXHR){
+                console.log(jqXHR.responseJSON);
+            }
+        });
+          renderCartCount();
           Swal.fire(
           'Nice!',
           'Add to Cart successfully',

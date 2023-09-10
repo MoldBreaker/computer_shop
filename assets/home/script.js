@@ -19,6 +19,18 @@ $(document).ready(function () {
 
     $.ajax({
         type: "GET",
+        url: "/api/carts/",
+        dataType: "JSON",
+        success: function (data) {
+            document.getElementById('cart-count').innerHTML = data.length;
+        },
+        error: function (jqXHR){
+            console.log(jqXHR.responseJSON);
+        }
+    });
+
+    $.ajax({
+        type: "GET",
         url: "/api/categories/",
         dataType: "JSON",
         success: function (data) {
@@ -61,6 +73,7 @@ const renderListProducts = () => {
         type: 'GET',
         dataType: 'json',
         success: function (data, status, xhr) {
+            renderCartCount();
             productsLength = data.maxLength;
             data = data.products;
             html = ``
@@ -110,6 +123,20 @@ const renderListProducts = () => {
             }
         }
     });
+}
+
+function renderCartCount() {
+    $.ajax({
+        type: "GET",
+        url: "/api/carts/",
+        dataType: "JSON",
+        success: function (data) {
+            document.getElementById('cart-count').innerHTML = data.length;
+        },
+        error: function (jqXHR){
+            document.getElementById('cart-count').innerHTML = 0;
+        }
+      });
 }
 
 

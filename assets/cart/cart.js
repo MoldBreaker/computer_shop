@@ -73,6 +73,18 @@ function renderCart() {
             }
             document.getElementById('cart-item-container').innerHTML = html;
             document.getElementById('total-price').innerHTML = formatMoney(totalPrice);
+
+            $.ajax({
+                type: "GET",
+                url: "/api/carts/",
+                dataType: "JSON",
+                success: function (data) {
+                    document.getElementById('cart-count').innerHTML = data.length;
+                },
+                error: function (jqXHR){
+                    console.log(jqXHR.responseJSON);
+                }
+            });
         }, 
         error: function (jqXHR) {
             if(jqXHR.status === 400){
