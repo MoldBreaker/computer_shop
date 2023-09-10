@@ -33,6 +33,7 @@ func InitWebRoutes() {
 	router.GET("/auth", HomeController.RenderAuthPage)
 	router.GET("/product/detail/:id", HomeController.RenderProductDetailPage)
 	router.GET("/cart", HomeController.RenderCartPage, AuthRedirect.IsLogined)
+	router.GET("/profile", HomeController.RenderProfilePage, AuthRedirect.IsLogined)
 
 	api := router.Group("/api")
 	{

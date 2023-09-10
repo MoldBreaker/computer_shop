@@ -2,11 +2,12 @@ package helpers
 
 import (
 	"errors"
-	"golang.org/x/exp/slices"
 	"mime/multipart"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"golang.org/x/exp/slices"
 )
 
 type Validator struct {
@@ -72,7 +73,7 @@ func (Validator *Validator) ComfirmPassword(password, comfirm_password string, r
 
 func (Validator *Validator) IsImage(file *multipart.FileHeader) error {
 	ext := strings.Split(file.Filename, ".")
-	commonExt := []string{"jpeg", "png", "jpg"}
+	commonExt := []string{"jpeg", "png", "jpg", "jfif"}
 	if !slices.Contains(commonExt, ext[len(ext)-1]) {
 		return errors.New("'" + file.Filename + "' is not an image")
 	}

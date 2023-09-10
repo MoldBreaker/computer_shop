@@ -42,3 +42,11 @@ func (HomeController *HomeController) RenderCartPage(e echo.Context) error {
 		"User": userSession,
 	})
 }
+
+func (HomeController *HomeController) RenderProfilePage(e echo.Context) error {
+	userSession, _ := helpers.GetSession("user", e)
+	tmpl := template.Must(template.ParseFiles("views/profile.html"))
+	return tmpl.Execute(e.Response(), map[string]interface{}{
+		"User": userSession,
+	})
+}

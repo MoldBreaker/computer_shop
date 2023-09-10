@@ -4,8 +4,9 @@ import (
 	"computer_shop/helpers"
 	"computer_shop/models"
 	"computer_shop/services"
-	"github.com/labstack/echo/v4"
 	"net/http"
+
+	"github.com/labstack/echo/v4"
 )
 
 type UserController struct{}
@@ -153,6 +154,7 @@ func (UserController *UserController) ChangeAvatar(e echo.Context) error {
 	if errChangeImage != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, errChangeImage)
 	}
+	http.Redirect(e.Response(), e.Request(), e.Request().Header.Get("Referer"), 302)
 	return e.JSON(http.StatusOK, map[string]string{
 		"message": "cập nhật ảnh đại diện thành công",
 	})
