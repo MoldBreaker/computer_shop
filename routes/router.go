@@ -14,11 +14,12 @@ var (
 	UserController         controllers.UserController
 	CartController         controllers.CartController
 	RoleController         controllers.RoleController
-	AuthMiddleware         middlewares.AuthMiddleware
 	InvoiceController      controllers.InvoiceController
 	HomeController         controllers.HomeController
 	NotificationController controllers.NotificationController
 	CategoryController     controllers.CategoryController
+	AuthMiddleware         middlewares.AuthMiddleware
+	AuthRedirect           middlewares.AuthRedirect
 )
 
 func InitWebRoutes() {
@@ -31,6 +32,7 @@ func InitWebRoutes() {
 	router.GET("/", HomeController.RenderHomePage)
 	router.GET("/auth", HomeController.RenderAuthPage)
 	router.GET("/product/detail/:id", HomeController.RenderProductDetailPage)
+	router.GET("/cart", HomeController.RenderCartPage, AuthRedirect.IsLogined)
 
 	api := router.Group("/api")
 	{
@@ -55,6 +57,7 @@ func InitWebRoutes() {
 
 		carts := api.Group("/carts")
 		{
+			carts.GET("/", CartController.GetItemsInCart, AuthMiddleware.IsLogined)
 			carts.GET("/:id", CartController.AddToCart, AuthMiddleware.IsLogined)
 			carts.GET("/update/:id", CartController.UpdateInCart, AuthMiddleware.IsLogined)
 			carts.DELETE("/:id", CartController.DeleteInCart, AuthMiddleware.IsLogined)

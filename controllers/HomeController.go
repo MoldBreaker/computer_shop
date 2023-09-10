@@ -34,3 +34,11 @@ func (HomeController *HomeController) RenderProductDetailPage(e echo.Context) er
 		"User": userSession,
 	})
 }
+
+func (HomeController *HomeController) RenderCartPage(e echo.Context) error {
+	userSession, _ := helpers.GetSession("user", e)
+	tmpl := template.Must(template.ParseFiles("views/cart.html"))
+	return tmpl.Execute(e.Response(), map[string]interface{}{
+		"User": userSession,
+	})
+}

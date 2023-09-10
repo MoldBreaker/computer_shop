@@ -39,7 +39,7 @@ $.ajax({
           </div>
           <div class="product-price">Price: ${formatMoney(data.price)}₫</div>
           <div class="add-to-cart-btn">
-            <button type="button" class="btn btn-primary">Add to Cart</button>
+            <button data-id="${data.product_id}" onclick="addTocart(this)" type="button" class="btn btn-primary">Add to Cart</button>
           </div>
           <div class="product-description">
             <h3 class="description-title">Description:</h3>
@@ -60,6 +60,26 @@ showDivs(slideIndex);
 
 function plusDivs(n) {
   showDivs(slideIndex += n);
+}
+
+function addTocart(e) {
+  $.ajax({
+      type: "GET",
+      url: "/api/carts/" + e.dataset.id,
+      dataType: "JSON",
+      success: function (response) {
+          Swal.fire(
+          'Nice!',
+          'Add to Cart successfully',
+          'success'
+          )
+      },
+      error: function (jqXHR) {
+          if (jqXHR.status === 403) {
+              window.location.href = "/auth"
+          }
+      }
+  });
 }
 
 function showDivs(n) {

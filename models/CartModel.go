@@ -20,6 +20,12 @@ type CartModel struct {
 	Quantity  int
 }
 
+type CartResponseModel struct {
+	Product  ProductResponse
+	Price    int
+	Quantity int
+}
+
 func (CartModel *CartModel) GetTablename() string {
 	return "carts"
 }

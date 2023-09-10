@@ -6,20 +6,16 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Computer Shop</title>
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="https://res.cloudinary.com/dapvdplse/image/upload/v1694143165/Images_Shop/0Zrzz4rRBNY_p2ZIqZNjg.jpg"
-    />
+    <title>VTShop</title>
+    <link rel="icon" type="image/x-icon" href="/home/img/logovt.png" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
+    <link rel="stylesheet" href="/home/dropdown.css" />
 
     <!-- Bootstrap icons-->
     <link
@@ -29,13 +25,37 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="/home/styles.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <link rel="stylesheet" href="/productDetail/styles.css" />
+    <link rel="stylesheet" href="/home/searchbar.css" />
+    <!-- Font Awesome -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      a {
+        text-decoration: none;
+      }
+    </style>
   </head>
   <body>
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container px-4 px-lg-5">
-        <a class="navbar-brand" href="/">Start Bootstrap</a>
+        <a class="navbar-brand" href="/"
+          ><img
+            src="/home/img/logovt.png"
+            style="width: 85px; height: 50px; border-radius: 10%"
+        /></a>
         <button
           class="navbar-toggler"
           type="button"
@@ -114,14 +134,34 @@
       </div>
     </nav>
 
-    <div id="container">
-      <div id="left-item">
-        <div id="images-slideshow" class="mt-4">
-          <div class="w3-content w3-display-container" id="slide-content"></div>
+    <section class="h-100" style="background-color: #eee">
+      <div class="container h-100 py-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-10">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h3 class="fw-normal mb-0 text-black">Shopping Cart</h3>
+              <div>
+                <p class="mb-0">
+                  <span class="text-muted">Total price: </span><p id="total-price"></p>
+                </p>
+              </div>
+            </div>
+
+            <div id="cart-item-container">
+              
+            </div>
+
+            <div class="card" id="checkout-btn">
+              <div class="card-body">
+                <button type="button" class="btn btn-warning btn-block btn-lg">
+                  Checkout
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div id="right-item" class="mt-4"></div>
-    </div>
+    </section>
 
     <!-- Footer-->
     <footer class="py-5 bg-dark">
@@ -131,8 +171,16 @@
         </p>
       </div>
     </footer>
+    <!-- MDB -->
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"
+    ></script>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/productDetail/productDetail.js"></script>
+    <script src="/pagination/pagination.js"></script>
+    <!-- Core theme JS-->
+    <script src="/home/script.js"></script>
+    <script src="/cart/cart.js"></script>
   </body>
 </html>

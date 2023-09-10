@@ -4,9 +4,10 @@ import (
 	"computer_shop/helpers"
 	"computer_shop/models"
 	"computer_shop/services"
-	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"
+
+	"github.com/labstack/echo/v4"
 )
 
 type CartController struct {
@@ -72,4 +73,19 @@ func (CartController *CartController) DeleteInCart(e echo.Context) error {
 	return e.JSON(http.StatusOK, map[string]string{
 		"message": "Xóa sản phẩm thành công",
 	})
+}
+
+func (CartController *CartController) GetItemsInCart(e echo.Context) error {
+	userModel, errSession := helpers.GetSession("user", e)
+	if errSession != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "You are not logged in")
+	}
+	user := userModel.(models.UserModel)
+	result, err := CartService.GetCartByUserId(user.UserId)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": err.Error(),
+		})
+	}
+	return e.JSON(http.StatusOK, result)
 }

@@ -10,7 +10,9 @@ import (
 type CartServive struct {
 }
 
-var CartDao dao.CartDAO
+var (
+	CartDao dao.CartDAO
+)
 
 func (CartServive *CartServive) AddToCart(userId, productId int) error {
 	query := fmt.Sprintf("WHERE user_id = %d AND product_id = %d", userId, productId)
@@ -74,4 +76,34 @@ func (CartServive *CartServive) DeleteInCart(userId, productId int) error {
 	} else {
 		return errors.New("Không có sản phẩm để xóa")
 	}
+}
+
+func (CartServive *CartServive) GetCartByUserId(userId int) ([]models.CartResponseModel, error) {
+	condition := fmt.Sprintf("WHERE user_id = %d", userId)
+	cart, err := CartDao.FindByCondition(condition)
+	if err != nil {
+		return nil, errors.New("Error when getting Cart")
+	}
+	if len(cart) == 0 {
+		return nil, errors.New("You haven't added anything to your cart yet")
+	}
+	var cartResponse []models.CartResponseModel
+	for _, c := range cart {
+		product, err := ProductDAO.FindById(c.ProductId)
+		if err != nil {
+			return nil, errors.New("Error when getting Product")
+		}
+		var productRes models.ProductResponse
+		var ProductImageService ProductImageService
+		urls, err := ProductImageService.GetImagesByProductId(product.ProductId)
+		productRes = productRes.Parse(product, urls)
+
+		item := models.CartResponseModel{
+			Product:  productRes,
+			Price:    c.Quantity * productRes.Price,
+			Quantity: c.Quantity,
+		}
+		cartResponse = append(cartResponse, item)
+	}
+	return cartResponse, nil
 }

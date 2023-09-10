@@ -85,7 +85,7 @@ const renderListProducts = () => {
                         </div>
                         <!-- Product actions-->
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Thêm vào giỏ hàng</a></div>
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" data-id="${data[i].product_id}" onclick="addTocart(this)">Add to Cart</a></div>
                         </div>
                     </div>
                 </div>`
@@ -151,6 +151,26 @@ function findByCategoryId(e) {
     categoryId = e.dataset.id;
     params.set("categoryId", categoryId);
     renderListProducts();
+}
+
+function addTocart(e) {
+    $.ajax({
+        type: "GET",
+        url: "/api/carts/" + e.dataset.id,
+        dataType: "JSON",
+        success: function (response) {
+            Swal.fire(
+            'Nice!',
+            'Add to Cart successfully',
+            'success'
+            )
+        },
+        error: function (jqXHR) {
+            if (jqXHR.status === 403) {
+                window.location.href = "/auth"
+            }
+        }
+    });
 }
 
 // Close the dropdown if the user clicks outside of it
