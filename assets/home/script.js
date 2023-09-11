@@ -3,6 +3,7 @@
 * Copyright 2013-2023 Start Bootstrap
 * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-shop-homepage/blob/master/LICENSE)
 */
+
 // This file is intentionally blank
 // Use this file to add JavaScript to your project
 let url = new URL(window.location.href);
@@ -14,20 +15,9 @@ let sortBtnList = document.querySelectorAll(".sort-li")
 let col = ""
 let sort = ""
 let categoryId = ""
+let notificationBell = document.getElementById('notification-bell');
 
 $(document).ready(function () {
-
-    $.ajax({
-        type: "GET",
-        url: "/api/carts/",
-        dataType: "JSON",
-        success: function (data) {
-            document.getElementById('cart-count').innerHTML = data.length;
-        },
-        error: function (jqXHR){
-            console.log(jqXHR.responseJSON);
-        }
-    });
 
     $.ajax({
         type: "GET",
@@ -41,6 +31,14 @@ $(document).ready(function () {
             document.getElementById("categories-dropdown").innerHTML = html;
         }
     });
+
+    try {
+        notificationBell.onclick = () => {
+            setNotifications();
+        }
+    } catch (e) {
+
+    }
 
     for(let i=0;i<sortBtnList.length;i++){
         sortBtnList[i].onclick = (e) =>{
@@ -73,7 +71,11 @@ const renderListProducts = () => {
         type: 'GET',
         dataType: 'json',
         success: function (data, status, xhr) {
-            renderCartCount();
+            try {
+                renderCartCount();
+            }catch (e) {
+                
+            }
             productsLength = data.maxLength;
             data = data.products;
             html = ``
@@ -104,6 +106,11 @@ const renderListProducts = () => {
                 </div>`
             }
             document.querySelector('#items-container').innerHTML = html
+            try {
+                getAllNotifications();
+            } catch (e) {
+
+            }
             $('#page').Pagination({ // id to initial draw and use pagination
                 size: productsLength, // size of list input
                 pageShow: 5, // 5 page-item per page
@@ -165,6 +172,83 @@ document.addEventListener("keypress", function(event) {
 });
 
 
+function getAllNotifications() {
+    $.ajax({
+        type: "GET",
+        url: "/api/notifications/",
+        dataType: "JSON",
+        success: function (response) {
+            console.log(response);
+            if(response == null) {
+                document.getElementById('notifications-count').classList.add('hidden');
+            } else {
+                document.getElementById('notifications-count').innerText = response.length
+            }
+        },
+        error: function (jqXHR) {
+            if(jqXHR.status === 403) {
+                return false;
+            }
+        }
+    });
+}
+
+function setNotifications() {
+    $.ajax({
+        type: "GET",
+        url: "/api/notifications/",
+        dataType: "JSON",
+        success: function (response) {
+            if(response.length == 0) {
+            } else {  
+                let html = ''
+                for(let i=0;i<response.length;i++){
+                    html += `[<a style="color: red;" onclick="deleteNotification(this)" data-id="${response[i].NotificationId}" >DELETE</a>]<p>[${reformatDate(response[i].CreatedAt)}]: ${response[i].Content}</p><hr/>`
+                }
+                document.getElementById('notification-body').innerHTML = html
+            }
+        },
+        error: function (jqXHR) {
+            if(jqXHR.status === 400) {
+                return jqXHR.responseJSON.message;
+            }
+        }
+    });
+}
+
+function deleteNotification(e) {
+    $.ajax({
+        type: "DELETE",
+        url: "api/notifications/" + e.dataset.id,
+        dataType: "JSON",
+        success: function (response) {
+            setNotifications();
+            getAllNotifications();
+        }, 
+        error: function (jqXHR) {
+            console.log(jqXHR.status);
+        }
+    });
+}
+
+function reformatDate(dateString) {
+
+    // Create a Date object from the input string
+    const date = new Date(dateString);
+
+    // Get the time components (hours, minutes, and seconds)
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+
+    // Get the date components (month, day, and year)
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0'); // Add 1 to month because it's zero-based
+    const day = date.getUTCDate().toString().padStart(2, '0');
+    const year = date.getUTCFullYear();
+
+    // Create the reformatted string
+    return `${hours}:${minutes}:${seconds} ${day}/${month}/${year}`;
+}
 
 function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
