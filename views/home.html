@@ -30,6 +30,9 @@
       a {
         text-decoration: none;
       }
+      a:hover {
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
@@ -78,6 +81,16 @@
           </ul>
 
           {{if .User }}
+          <a
+            class="notification"
+            style="color: black"
+            data-bs-toggle="modal"
+            data-bs-target="#notifications-list"
+            id="notification-bell"
+          >
+            <span><i class="fa fa-bell" aria-hidden="true"></i></span>
+            <span class="notifications-count" id="notifications-count"></span>
+          </a>
           <form class="d-flex">
             <a href="/cart" class="btn btn-outline-dark" type="submit">
               <i class="bi-cart-fill me-1"></i>
@@ -188,6 +201,42 @@
         <div class="demo">
           <div id="page">
             <ul class="pagination"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="notifications-list"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Notifications
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3" id="notification-body"></div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
           </div>
         </div>
       </div>

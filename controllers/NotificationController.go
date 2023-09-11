@@ -3,9 +3,10 @@ package controllers
 import (
 	"computer_shop/helpers"
 	"computer_shop/models"
-	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"
+
+	"github.com/labstack/echo/v4"
 )
 
 type NotificationController struct {
@@ -40,6 +41,8 @@ func (NotificationController *NotificationController) DelateNotification(e echo.
 	user := userModel.(models.UserModel)
 	if notifications, err := NotificationService.GetAllNotification(user.UserId); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Lỗi khi lấy thông báo")
+	} else if len(notifications) == 0 {
+		return e.JSON(http.StatusOK, nil)
 	} else {
 		return e.JSON(http.StatusOK, notifications)
 	}

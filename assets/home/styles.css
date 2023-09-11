@@ -11,6 +11,33 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
 
+ .notification {
+    text-decoration: none;
+    padding: 15px 26px;
+    position: relative;
+  }
+
+  .notifications-count {
+    position: absolute;
+    top: 8px;
+    right: 20px;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: red;
+    text-align: center;
+    color: white;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .show {
+    display: block;
+  }
+
+
 :root {
     --bs-blue: #0d6efd;
     --bs-indigo: #6610f2;
