@@ -49,6 +49,6 @@ func (NotificationService *NotificationService) DeleteNotification(notificationI
 }
 
 func (NotificationService *NotificationService) GetAllNotification(userId int) ([]models.NotificationModel, error) {
-	condition := fmt.Sprintf("WHERE user_id = %d", userId)
+	condition := fmt.Sprintf("WHERE user_id = %d ORDER BY created_at DESC", userId)
 	return NotificationDAO.FindByCondition(condition)
 }

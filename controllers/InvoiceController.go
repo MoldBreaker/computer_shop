@@ -19,6 +19,8 @@ var (
 )
 
 func (InvoiceController *InvoiceController) CreateInvoice(e echo.Context) error {
+	var CartService services.CartService
+	var NotificationService services.NotificationService
 	userModel, errSession := helpers.GetSession("user", e)
 	if errSession != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Bạn chưa đăng nhập")
@@ -57,6 +59,12 @@ func (InvoiceController *InvoiceController) CreateInvoice(e echo.Context) error 
 	errInsert := InvoiceService.Create(user, cartData)
 	if errInsert != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, errInsert)
+	}
+	if err := CartService.DeleteAllCart(user.UserId); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err)
+	}
+	if err := NotificationService.SendNotificationToOneUser(user.UserId, "Checkout successfully"); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 	return e.JSON(http.StatusOK, "Thanh toán thành công")
 }

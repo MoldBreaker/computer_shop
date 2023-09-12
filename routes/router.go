@@ -20,6 +20,7 @@ var (
 	CategoryController     controllers.CategoryController
 	AuthMiddleware         middlewares.AuthMiddleware
 	AuthRedirect           middlewares.AuthRedirect
+	CheckCartMiddleware    middlewares.CheckCartMiddleware
 )
 
 func InitWebRoutes() {
@@ -34,6 +35,7 @@ func InitWebRoutes() {
 	router.GET("/product/detail/:id", HomeController.RenderProductDetailPage)
 	router.GET("/cart", HomeController.RenderCartPage, AuthRedirect.IsLogined)
 	router.GET("/profile", HomeController.RenderProfilePage, AuthRedirect.IsLogined)
+	router.GET("/checkout", HomeController.RenderCheckoutPage, AuthMiddleware.IsLogined)
 
 	api := router.Group("/api")
 	{

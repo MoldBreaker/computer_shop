@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="/checkout/checkout.css"/>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<h2>Responsive Checkout Form</h2>
+<p>Resize the browser window to see the effect. When the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other.</p>
+<div class="row">
+    <div class="col-75">
+        <div class="container">
+            <form id="checkout-form">
+                <div class="row">
+                    <div class="col-50">
+                        <h3>Billing Address</h3>
+                        <label for="fname"><i class="fa fa-user"></i> Full Name</label>
+                        <input type="text" id="fname" name="firstname" placeholder="John M. Doe" value="{{.User.Username}}" disabled>
+                        <label for="adr"><i class="fa fa-phone"></i> Phone</label>
+                        <input type="text" id="phone" name="phone" placeholder="+84" value="{{.User.Phone}}"> <br>
+                        <span id="phone-error" style="color: rebeccapurple"></span>
+                        <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
+                        <input type="text" id="adr" name="address" placeholder="542 W. 15th Street" value="{{.User.Address}}">
+                        <span id="address-error" style="color: rebeccapurple"></span>
+                    </div>
+                </div>
+                <input type="submit" id="checkout-btn" value="Continue to checkout" style="background-color:black" class="btn">
+            </form>
+        </div>
+    </div>
+    <div class="col-25">
+        <div class="container" id="container">
+
+        </div>
+    </div>
+</div>
+<script src="/checkout/checkout.js"></script>
+
+</body>
+</html>

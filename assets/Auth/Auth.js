@@ -11,9 +11,6 @@ const isContainsLowercase = /^(?=.*[a-z]).*$/;
 const isContainsNumber = /^(?=.*[0-9]).*$/;
 const isContainsSymbol = /^(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).*$/;
 const isValidLength = /^.{6,16}$/;
-// const passRegexLower = /.*[a-z].*/
-// const passRegexUpper = /.*[A-Z].*/
-// const passRegexLength = /.*[a-zA-Z0-9]{8,}.*/
 let regularExpression = /^(\S)(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹])[a-zA-Z0-9~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]{10,16}$/;
 switchers.forEach(item => {
     item.addEventListener('click', function() {
@@ -171,3 +168,5 @@ signupBtn.onclick = (e =>{
 
     })
 })
+
+
