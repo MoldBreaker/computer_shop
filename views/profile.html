@@ -189,6 +189,8 @@
                       class="btn btn-outline-dark"
                       data-mdb-ripple-color="dark"
                       style="z-index: 1; margin-left: 16px"
+                      data-bs-toggle="modal"
+                      data-bs-target="#changePassword"
                     >
                       Change Password
                     </button>
@@ -362,7 +364,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabel">
-              Update your Information
+              Update Your Information
             </h1>
             <button
               type="button"
@@ -407,6 +409,79 @@
               type="button"
               id="update-information-save-btn"
               class="btn btn-primary"
+            >
+              Save changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!--    ChangePass-->
+    <div
+            class="modal fade"
+            id="changePassword"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Change Password
+            </h1>
+            <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <form id="changepass-form">
+                <div class="mb-3">
+                  <label for="oldpassword" class="form-label">Old Password</label>
+                  <input
+                          type="password"
+                          class="form-control"
+                          id="oldpassword"
+                          name="oldpassword"
+                  />
+                  <span id="old-password-error" class="text-danger"></span>
+                  <label for="newpassword" class="form-label">New Password</label>
+                  <input
+                          type="password"
+                          class="form-control"
+                          id="newpassword"
+                          name="newpassword"
+                  />
+                  <span id="new-password-error" class="text-danger"></span>
+                  <label for="cnewpassword" class="form-label">Confirm New Password</label>
+                  <input
+                          type="password"
+                          class="form-control"
+                          id="cnewpassword"
+                          name="cnewpassword"
+                  />
+                  <span id="confirm-new-password-error" class="text-danger"></span>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+                    type="button"
+                    id="change-password-save-btn"
+                    class="btn btn-primary"
             >
               Save changes
             </button>
