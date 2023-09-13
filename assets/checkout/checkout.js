@@ -33,43 +33,54 @@ checkoutBtn.onclick = (e) =>{
 
     if(!check) return false;
 
-    $.ajax({
-        method: 'POST',
-        url: '/api/users/info',
-        data: {
-            phone: phone,
-            address: address
-        },
-        dataType: 'json',
-        success: function(response) {
+    Swal.fire({
+        title: 'Have you checked the information is correct?',
+        showDenyButton: true,
+        confirmButtonText: 'Yes',
+        denyButtonText: `No`,
+    }).then((result) => {
+        if (result.isConfirmed) {
             $.ajax({
                 method: 'POST',
-                url: '/api/invoices/',
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify({
-                    cart: cartArray
-                }),
-                success: function(data) {
-                    window.location.href = '/'
+                url: '/api/users/info',
+                data: {
+                    phone: phone,
+                    address: address
                 },
-                error: function(error) {
-                    Swal.fire(
-                        'Nice!',
-                        `${error.responseJSON.message}`,
-                        'error'
-                    )
+                dataType: 'json',
+                success: function(response) {
+                    $.ajax({
+                        method: 'POST',
+                        url: '/api/invoices/',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify({
+                            cart: cartArray
+                        }),
+                        success: function(data) {
+                            window.location.href = '/'
+                        },
+                        error: function(error) {
+                            Swal.fire(
+                                'Nice!',
+                                `${error.responseJSON.message}`,
+                                'error'
+                            )
+                        }
+                    })
+                },
+                error: function(jqXHR){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: err.responseText,
+                    })
                 }
-            })
-        },
-        error: function(jqXHR){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: err.responseText,
             })
         }
     })
+
+
 }
 $.ajax({
     method: 'GET',
@@ -86,7 +97,9 @@ $.ajax({
         }
         html += `<p>Total <span class="price" style="color:black"><b>${formatMoney(sum)}</b></span></p>`
         document.getElementById('container').innerHTML = html;
+
     },
+
     error: function(jqXHR){
         console.log(jqXHR);
     }

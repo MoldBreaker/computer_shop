@@ -21,6 +21,7 @@ var (
 	AuthMiddleware         middlewares.AuthMiddleware
 	AuthRedirect           middlewares.AuthRedirect
 	CheckCartMiddleware    middlewares.CheckCartMiddleware
+	SuperAdminController   controllers.SuperAdminController
 )
 
 func InitWebRoutes() {
@@ -36,6 +37,8 @@ func InitWebRoutes() {
 	router.GET("/cart", HomeController.RenderCartPage, AuthRedirect.IsLogined)
 	router.GET("/profile", HomeController.RenderProfilePage, AuthRedirect.IsLogined)
 	router.GET("/checkout", HomeController.RenderCheckoutPage, AuthMiddleware.IsLogined)
+
+	router.GET("/dashboard", SuperAdminController.RenderSuperAminPage, AuthMiddleware.IsLogined, AuthMiddleware.IsSuperAdmin)
 
 	api := router.Group("/api")
 	{
@@ -56,6 +59,8 @@ func InitWebRoutes() {
 			users.POST("/reset-password", UserController.ResetPassword, AuthMiddleware.IsLogined)
 			users.POST("/avatar", UserController.ChangeAvatar, AuthMiddleware.IsLogined)
 			users.POST("/info", UserController.UpdateInformation, AuthMiddleware.IsLogined)
+			users.GET("/", UserController.GetAllUsers, AuthMiddleware.IsLogined, AuthMiddleware.IsSuperAdmin)
+			users.PUT("/block/:id", UserController.BlockUser, AuthMiddleware.IsLogined, AuthMiddleware.IsSuperAdmin)
 		}
 
 		carts := api.Group("/carts")
