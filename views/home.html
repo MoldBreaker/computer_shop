@@ -60,7 +60,13 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/">Home</a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+            {{if .User}}
+              {{if eq .User.RoleId 9}}
+              <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+              {{else}}
+              {{end}}
+            {{else}}
+            {{end}}
             <li class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle"
@@ -246,7 +252,8 @@
     <footer class="py-5 bg-dark">
       <div class="container">
         <p class="m-0 text-center text-white">
-          𝙲𝚘𝚗𝚝𝚊𝚌𝚝 𝚞𝚜             <a target="_blank" href="https://www.facebook.com/vtshop2023/"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          𝙲𝚘𝚗𝚝𝚊𝚌𝚝 𝚞𝚜             <a target="_blank" href="https://www.facebook.com/vtshop2023/"><i class="fa fa-facebook" aria-hidden="true"></i></a> <br>
+          Copyright VTSHOP Website 2023
       </div>
     </footer>
     <!-- Bootstrap core JS-->

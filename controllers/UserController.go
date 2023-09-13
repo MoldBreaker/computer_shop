@@ -5,13 +5,16 @@ import (
 	"computer_shop/models"
 	"computer_shop/services"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
 
 type UserController struct{}
 
-var UserService services.UserService
+var (
+	UserService services.UserService
+)
 
 func (UserController *UserController) Register(e echo.Context) error {
 	userSession, _ := helpers.GetSession("user", e)
@@ -178,5 +181,44 @@ func (UserController *UserController) UpdateInformation(e echo.Context) error {
 	UserService.UpdateInformation(phone, address, user)
 	return e.JSON(http.StatusOK, map[string]string{
 		"message": "cập nhật thông tin thành công",
+	})
+}
+
+func (UserController *UserController) GetAllUsers(e echo.Context) error {
+	var roleService services.RoleService
+	roles, err := roleService.GetAllRoles()
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, map[string]string{
+			"message": "Cant get all roles",
+		})
+	}
+	result, err := UserService.GetAllUsers()
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, map[string]string{
+			"message": "Cant get all users",
+		})
+	}
+	return e.JSON(http.StatusOK, map[string]interface{}{
+		"users": result,
+		"roles": roles,
+	})
+}
+
+func (UserController *UserController) BlockUser(e echo.Context) error {
+	userIdString := e.Param("id")
+	id, err := strconv.Atoi(userIdString)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": err.Error(),
+		})
+	}
+	errBlock := UserService.BlockUser(id)
+	if errBlock != nil {
+		return e.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": errBlock.Error(),
+		})
+	}
+	return e.JSON(http.StatusOK, map[string]interface{}{
+		"message": "Block user successfully",
 	})
 }

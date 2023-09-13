@@ -10,15 +10,15 @@
 </head>
 <body>
 
-<h2>Responsive Checkout Form</h2>
-<p>Resize the browser window to see the effect. When the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other.</p>
+
+<h3><p>Receipt Summary</p></h3>
 <div class="row">
     <div class="col-75">
         <div class="container">
             <form id="checkout-form">
                 <div class="row">
                     <div class="col-50">
-                        <h3>Billing Address</h3>
+                        <h3>Payment Information</h3>
                         <label for="fname"><i class="fa fa-user"></i> Full Name</label>
                         <input type="text" id="fname" name="firstname" placeholder="John M. Doe" value="{{.User.Username}}" disabled>
                         <label for="adr"><i class="fa fa-phone"></i> Phone</label>

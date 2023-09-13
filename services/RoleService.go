@@ -21,3 +21,6 @@ func (RoleService *RoleService) GetRoleById(id int) models.RoleModel {
 	role, _ := RoleDAO.FindById(id)
 	return role
 }
+func (RoleService *RoleService) GetAllRoles() ([]models.RoleModel, error) {
+	return RoleDAO.FindAll()
+}

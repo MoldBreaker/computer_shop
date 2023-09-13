@@ -39,7 +39,7 @@ func (UserService *UserService) Register(user models.UserModel) (int, string, er
 		return -1, "Error when getting user", err
 	}
 	if len(result) > 0 {
-		return -1, "Email already registered", err
+		return -1, "Email already registered", errors.New("Email already registered")
 	}
 	hashed, err := HashPassword(user.Password)
 	if err != nil {
@@ -60,6 +60,8 @@ func (UserService *UserService) Login(user models.UserModel) (models.UserModel, 
 	}
 	if len(userModel) == 0 {
 		return user, "Email not find", err
+	} else if userModel[0].Password == "" {
+		return user, "This account is blocked", err
 	}
 	if !CheckPasswordHash(user.Password, userModel[0].Password) {
 		return user, "Password not match", err
@@ -105,5 +107,20 @@ func (UserService *UserService) ChangeAvatar(avatar []*multipart.FileHeader, use
 func (UserService *UserService) UpdateInformation(phone, address string, user models.UserModel) error {
 	user.Phone = phone
 	user.Address = address
+	return UserDAO.Update(user)
+}
+
+func (UserService *UserService) GetAllUsers() ([]models.UserModel, error) {
+	userCondition := fmt.Sprintf("WHERE users.role_id != %d", utils.SuperAdmin)
+	return UserDAO.FindByCondition(userCondition)
+}
+
+func (UserService *UserService) BlockUser(userId int) error {
+	user, err := UserDAO.FindById(userId)
+	if err != nil {
+		return errors.New("can not get user")
+	}
+	user.Password = ""
+	user.Token = ""
 	return UserDAO.Update(user)
 }
