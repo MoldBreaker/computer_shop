@@ -35,7 +35,7 @@ func InitWebRoutes() {
 	router.GET("/auth", HomeController.RenderAuthPage)
 	router.GET("/product/detail/:id", HomeController.RenderProductDetailPage)
 	router.GET("/cart", HomeController.RenderCartPage, AuthRedirect.IsLogined)
-	router.GET("/profile", HomeController.RenderProfilePage, AuthRedirect.IsLogined)
+	router.GET("/profile/:id", HomeController.RenderProfilePage)
 	router.GET("/checkout", HomeController.RenderCheckoutPage, AuthMiddleware.IsLogined, CheckCartMiddleware.CheckCartEmpty)
 
 	router.GET("/dashboard", SuperAdminController.RenderSuperAminPage, AuthMiddleware.IsLogined, AuthMiddleware.IsSuperAdmin)
@@ -60,6 +60,7 @@ func InitWebRoutes() {
 			users.POST("/avatar", UserController.ChangeAvatar, AuthMiddleware.IsLogined)
 			users.POST("/info", UserController.UpdateInformation, AuthMiddleware.IsLogined)
 			users.GET("/", UserController.GetAllUsers, AuthMiddleware.IsLogined, AuthMiddleware.IsSuperAdmin)
+			users.GET("/:id", UserController.GetUserById)
 			users.PUT("/block/:id", UserController.BlockUser, AuthMiddleware.IsLogined, AuthMiddleware.IsSuperAdmin)
 		}
 

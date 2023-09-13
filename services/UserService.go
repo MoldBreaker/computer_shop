@@ -124,3 +124,11 @@ func (UserService *UserService) BlockUser(userId int) error {
 	user.Token = ""
 	return UserDAO.Update(user)
 }
+
+func (UserService *UserService) GetUserById(userId int) (models.UserModel, error) {
+	user, err := UserDAO.FindById(userId)
+	if err != nil {
+		return user, errors.New("can not get user")
+	}
+	return user, nil
+}

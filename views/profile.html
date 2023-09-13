@@ -26,7 +26,7 @@
     <link href="/home/styles.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <link rel="stylesheet" href="/home/searchbar.css" />
-    <link rel="stylesheet" href="profile/profile.css" />
+    <link rel="stylesheet" href="userProfile/profile.css" />
     <style>
       a {
         text-decoration: none;
@@ -124,7 +124,8 @@
       </div>
     </nav>
 
-    <section class="h-100 gradient-custom-2">
+    <input type="hidden" id="current-id" value="{{.User.UserId}}" />
+    <section class="h-100 gradient-custom-2" id="info-container">
       <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
           <div class="col col-lg-9 col-xl-7">
@@ -132,85 +133,8 @@
               <div
                 class="rounded-top text-white d-flex flex-row"
                 style="background-color: #000; height: 200px"
-              >
-                <div
-                  class="ms-4 mt-5 d-flex flex-column cover object"
-                  style="width: 150px"
-                >
-                  {{if eq .User.Avatar ""}}
-                  <img
-                    src="/home/img/user.png"
-                    alt="Generic placeholder image"
-                    class="img-fluid img-thumbnail mt-4 mb-2"
-                    style="z-index: 1; border-radius: 50%"
-                  />
-                  {{else}}
-                  <img
-                    src="{{.User.Avatar}}"
-                    alt="Generic placeholder image"
-                    class="img-fluid img-thumbnail mt-4 mb-2 contain"
-                    style="
-                      z-index: 1;
-                      border-radius: 50%;
-                      width: 150px;
-                      height: 150px;
-                    "
-                  />
-                  {{end}}
-                  <div
-                    style="
-                      z-index: 1;
-                      display: flex;
-                      justify-content: space-between;
-                    "
-                  >
-                    <button
-                      type="button"
-                      class="btn btn-outline-dark"
-                      data-mdb-ripple-color="dark"
-                      style="z-index: 1; margin-left: 16px"
-                      data-bs-toggle="modal"
-                      data-bs-target="#form-avatar"
-                    >
-                      Change Avatar
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-outline-dark"
-                      data-mdb-ripple-color="dark"
-                      style="z-index: 1; margin-left: 16px"
-                      data-bs-toggle="modal"
-                      data-bs-target="#update-infomation-form"
-                    >
-                      Update Information
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-outline-dark"
-                      data-mdb-ripple-color="dark"
-                      style="z-index: 1; margin-left: 16px"
-                      data-bs-toggle="modal"
-                      data-bs-target="#changePassword"
-                    >
-                      Change Password
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-outline-dark"
-                      data-mdb-ripple-color="red"
-                      style="z-index: 1; margin-left: 16px"
-                      id="logout-btn"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                </div>
-                <div class="ms-3" style="margin-top: 130px">
-                  <h3>{{.User.Username}}</h3>
-                  Joined At:
-                  <a id="created-at">{{.User.CreatedAt}}</a>
-                </div>
-              </div>
+                id="userinfo"
+              ></div>
               <div class="p-4 text-black" style="background-color: #f8f9fa">
                 <div class="d-flex justify-content-end text-center py-1">
                   <div>
@@ -344,6 +268,7 @@
               type="button"
               id="change-avatar-save-btn"
               class="btn btn-primary"
+              onclick="handlerChangeAvatar()"
             >
               Save changes
             </button>
@@ -409,6 +334,7 @@
               type="button"
               id="update-information-save-btn"
               class="btn btn-primary"
+              onclick="handlerUpdateInfo(this)"
             >
               Save changes
             </button>
@@ -417,13 +343,13 @@
       </div>
     </div>
 
-<!--    ChangePass-->
+    <!--    ChangePass-->
     <div
-            class="modal fade"
-            id="changePassword"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
+      class="modal fade"
+      id="changePassword"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
     >
       <div class="modal-dialog">
         <div class="modal-content">
@@ -432,56 +358,66 @@
               Change Password
             </h1>
             <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
             ></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
               <form id="changepass-form">
                 <div class="mb-3">
-                  <label for="oldpassword" class="form-label">Old Password</label>
+                  <label for="oldpassword" class="form-label"
+                    >Old Password</label
+                  >
                   <input
-                          type="password"
-                          class="form-control"
-                          id="oldpassword"
-                          name="oldpassword"
+                    type="password"
+                    class="form-control"
+                    id="oldpassword"
+                    name="oldpassword"
                   />
                   <span id="old-password-error" class="text-danger"></span>
-                  <label for="newpassword" class="form-label">New Password</label>
+                  <label for="newpassword" class="form-label"
+                    >New Password</label
+                  >
                   <input
-                          type="password"
-                          class="form-control"
-                          id="newpassword"
-                          name="newpassword"
+                    type="password"
+                    class="form-control"
+                    id="newpassword"
+                    name="newpassword"
                   />
                   <span id="new-password-error" class="text-danger"></span>
-                  <label for="cnewpassword" class="form-label">Confirm New Password</label>
+                  <label for="cnewpassword" class="form-label"
+                    >Confirm New Password</label
+                  >
                   <input
-                          type="password"
-                          class="form-control"
-                          id="cnewpassword"
-                          name="cnewpassword"
+                    type="password"
+                    class="form-control"
+                    id="cnewpassword"
+                    name="cnewpassword"
                   />
-                  <span id="confirm-new-password-error" class="text-danger"></span>
+                  <span
+                    id="confirm-new-password-error"
+                    class="text-danger"
+                  ></span>
                 </div>
               </form>
             </div>
           </div>
           <div class="modal-footer">
             <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
             >
               Close
             </button>
             <button
-                    type="button"
-                    id="change-password-save-btn"
-                    class="btn btn-primary"
+              type="button"
+              id="change-password-save-btn"
+              class="btn btn-primary"
+              onclick="handlerChangePassword()"
             >
               Save changes
             </button>
@@ -493,9 +429,7 @@
     <!-- Footer-->
     <footer class="py-5 bg-dark">
       <div class="container">
-        <p class="m-0 text-center text-white">
-          Copyright VTSHOP Website 2023
-        </p>
+        <p class="m-0 text-center text-white">Copyright VTSHOP Website 2023</p>
       </div>
     </footer>
     <!-- Bootstrap core JS-->
@@ -503,6 +437,6 @@
     <script src="/pagination/pagination.js"></script>
     <!-- Core theme JS-->
     <script src="/home/script.js"></script>
-    <script src="/profile/profile.js"></script>
+    <script src="/userProfile/profile.js"></script>
   </body>
 </html>

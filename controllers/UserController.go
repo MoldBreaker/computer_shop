@@ -222,3 +222,30 @@ func (UserController *UserController) BlockUser(e echo.Context) error {
 		"message": "Block user successfully",
 	})
 }
+
+func (UserController *UserController) GetUserById(e echo.Context) error {
+	userIdString := e.Param("id")
+	id, err := strconv.Atoi(userIdString)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": "Invalid user id or this id is not exists",
+		})
+	}
+	user, err := UserService.GetUserById(id)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": err.Error(),
+		})
+	}
+	if user.UserId == 0 {
+		return e.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": "User not exists",
+		})
+	}
+	var RoleService services.RoleService
+	role := RoleService.GetRoleById(user.RoleId)
+	return e.JSON(http.StatusOK, map[string]interface{}{
+		"user": user,
+		"role": role,
+	})
+}

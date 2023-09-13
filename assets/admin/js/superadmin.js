@@ -1,7 +1,6 @@
 
 $(document).ready(function() {
     renderUserTable();
-
 })
 
 function renderUserTable() {
@@ -14,9 +13,14 @@ function renderUserTable() {
             let users = data.users
             let roles = data.roles
             for (let i = 0; i < users.length;i++){
+                const dateString = users[i].created_at;
+                const dateArray = dateString.split("T"); 
+                const datePortion = dateArray[0];
+                const parts = datePortion.split("-");
+                const formattedDate = `${dateArray[1].split("Z")[0]} ${parts[2]}/${parts[1]}/${parts[0]}`;
                 html += `
                 <tr>
-                    <td>${users[i].user_name}</td>
+                    <td><a style="text-decoration: none;" href="/profile/${users[i].user_id}">${users[i].user_name}</a></td>
                     <td>${users[i].address}</td>
                     <td>${users[i].phone}</td>
                     <td>${users[i].email}</td>
@@ -25,7 +29,7 @@ function renderUserTable() {
                             return each.role_name;
                         }
                     })}</td>
-                    <td>${users[i].created_at}</td>
+                    <td>${formattedDate}</td>
                     <td>${users[i].password == "" ? "Blocked" : "Active"}</td>
                     <td><button data-id="${users[i].user_id}" onclick="blockUser(this)" type="button" class="btn btn-danger">Block</button></td>
                 </tr>

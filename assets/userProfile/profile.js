@@ -3,10 +3,6 @@ let changeAvatarbtn = document.getElementById('change-avatar-save-btn')
 let updateInfoBtn = document.getElementById('update-information-save-btn')
 let validImageExt = ["jpeg", "png", "jpg", "jfif"]
 let regexPhoneNumber = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
-const dateString = document.getElementById('created-at').innerText;
-const dateArray = dateString.split(" "); 
-const datePortion = dateArray[0];
-const parts = datePortion.split("-");
 let changePasswordbtn = document.getElementById('change-password-save-btn')
 const isNonWhiteSpace = /^\S*$/;
 const isContainsUppercase = /^(?=.*[A-Z]).*$/;
@@ -15,37 +11,132 @@ const isContainsNumber = /^(?=.*[0-9]).*$/;
 const isContainsSymbol = /^(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).*$/;
 const isValidLength = /^.{6,16}$/;
 let regularExpression = /^(\S)(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹])[a-zA-Z0-9~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]{6,16}$/;
+var currentUrl = window.location.href;
+var match = currentUrl.match(/\/(\d+)\/?$/);
+let currentUserId = document.getElementById('current-id').value;
 
+$.ajax({
+  type: "GET",
+  url: "/api/users/" + match[1],
+  dataType: "JSON",
+  success: function (response) {
+    let user = response.user;
+    let role = response.role;
+    const dateString = user.created_at;
+    const dateArray = dateString.split("T"); 
+    const datePortion = dateArray[0];
+    const parts = datePortion.split("-");
+    const formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+    let html = `
+    <div
+      class="ms-4 mt-5 d-flex flex-column cover object circular-image"
+      style="width: 150px"
+    >
+      ${user.avatar == '' ? `<img
+      src="/home/img/user.png"
+      alt="Generic placeholder image"
+      class="img-fluid img-thumbnail mt-4 mb-2"
+      style="z-index: 1; border-radius: 50%"
+    />` : `<img
+      src="${user.avatar}"
+      alt="Generic placeholder image"
+      class="img-fluid img-thumbnail mt-4 mb-2 contain"
+      style="
+        z-index: 1;
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+      "
+    />`}
+    <div
+      style="
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+      "
+    >
+      ${currentUserId == user.user_id ? `<button
+      type="button"
+      class="btn btn-outline-dark"
+      data-mdb-ripple-color="dark"
+      style="z-index: 1; margin-left: 16px"
+      data-bs-toggle="modal"
+      data-bs-target="#form-avatar"
+    >
+      Change Avatar
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      data-mdb-ripple-color="dark"
+      style="z-index: 1; margin-left: 16px"
+      data-bs-toggle="modal"
+      data-bs-target="#update-infomation-form"
+    >
+      Update Information
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      data-mdb-ripple-color="dark"
+      style="z-index: 1; margin-left: 16px"
+      data-bs-toggle="modal"
+      data-bs-target="#changePassword"
+    >
+      Change Password
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      data-mdb-ripple-color="red"
+      style="z-index: 1; margin-left: 16px"
+      id="logout-btn" onclick="handlerLogout()"
+    >
+      Logout
+    </button>` : ``}
+    </div>
+  </div>
+    <div class="ms-3" style="margin-top: 130px">
+      <h3>${user.user_name} (${role.role_name})</h3>
+      Joined At:
+      <a id="created-at">${formattedDate}</a>
+    </div>
+    `;
+    document.getElementById('userinfo').innerHTML = html;
+  },
+  error: function (jqXHR) {
+    if(jqXHR.status === 400){
+      document.getElementById('info-container').innerHTML = `<h1 style="text-align: center; color: red;">${jqXHR.responseJSON.message}</h1>`;
+    }
+  }
+});
 
-const formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
-document.getElementById('created-at').innerText = formattedDate
-
-logoutBtn.onclick = () => {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "Do you want to logout?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          $.ajax({
-            type: "GET",
-            url: "/api/users/logout",
-            success: function (data) {
-                window.location.href = "/"
-            },
-            error: function (jqXHR) {
-                console.log(jqXHR.responseText);
-            }
-          });
+function handlerLogout() {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "Do you want to logout?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        type: "GET",
+        url: "/api/users/logout",
+        success: function (data) {
+            window.location.href = "/"
+        },
+        error: function (jqXHR) {
+            console.log(jqXHR.responseText);
         }
-      })
+      });
+    }
+  })
 }
 
-changeAvatarbtn.onclick = async (e) => {
+async function handlerChangeAvatar() {
   let check = true;
   let changeAvatarForm = document.getElementById('change-avatar-form');
   formAvatar = new FormData(changeAvatarForm);
@@ -68,8 +159,7 @@ changeAvatarbtn.onclick = async (e) => {
   }
 }
 
-updateInfoBtn.onclick = (e) => {
-  e.preventDefault();
+function handlerUpdateInfo() {
   let check = true;
   formHtml = document.getElementById('info-form');
   let form = new FormData(formHtml);
@@ -122,10 +212,9 @@ updateInfoBtn.onclick = (e) => {
   return;
 }
 
-changePasswordbtn.onclick = (e =>{
-  e.preventDefault();
+function handlerChangePassword() {
   let check = true;
-  changePasswordHtml = document.getElementById('changepass-form');
+  let changePasswordHtml = document.getElementById('changepass-form');
   let formData = new FormData(changePasswordHtml);
   let oldPassword = formData.get('oldpassword');
   let newPassword = formData.get('newpassword');
@@ -193,4 +282,4 @@ changePasswordbtn.onclick = (e =>{
     }
   })
   return;
-})
+}
