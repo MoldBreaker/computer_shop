@@ -1,4 +1,4 @@
-
+let gotoCheckoutBtn = document.getElementById('goto-checkout-btn')
 
 $(document).ready(function() {
     renderCart();
@@ -94,6 +94,19 @@ function renderCart() {
             }
         }
     });
+
+    gotoCheckoutBtn.onclick = () => {
+        $.ajax({
+            method: 'GET',
+            url: '/checkout',
+            success: function (response) {
+                window.location.href = '/checkout'
+            },
+            error: function (jqXHR){
+                console.log(jqXHR.responseJSON.message)
+            }
+        })
+    }
 }
 
 function increase(e) {

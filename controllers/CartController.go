@@ -13,7 +13,7 @@ import (
 type CartController struct {
 }
 
-var CartService services.CartServive
+var CartService services.CartService
 
 func (CartController *CartController) AddToCart(e echo.Context) error {
 	productIdStr := e.Param("id")

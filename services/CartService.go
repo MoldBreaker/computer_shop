@@ -7,14 +7,14 @@ import (
 	"fmt"
 )
 
-type CartServive struct {
+type CartService struct {
 }
 
 var (
 	CartDao dao.CartDAO
 )
 
-func (CartServive *CartServive) AddToCart(userId, productId int) error {
+func (CartService *CartService) AddToCart(userId, productId int) error {
 	query := fmt.Sprintf("WHERE user_id = %d AND product_id = %d", userId, productId)
 	result, err := CartDao.FindByCondition(query)
 	if err != nil {
@@ -37,9 +37,9 @@ func (CartServive *CartServive) AddToCart(userId, productId int) error {
 	}
 }
 
-func (CartServive *CartServive) UpdateInCart(userId, productId int, types string) error {
+func (CartService *CartService) UpdateInCart(userId, productId int, types string) error {
 	if types == "increase" {
-		CartServive.AddToCart(userId, productId)
+		CartService.AddToCart(userId, productId)
 		return nil
 	} else if types == "decrease" {
 		query := fmt.Sprintf("WHERE user_id = %d AND product_id = %d", userId, productId)
@@ -64,7 +64,7 @@ func (CartServive *CartServive) UpdateInCart(userId, productId int, types string
 	return errors.New("Loại không tồn tại")
 }
 
-func (CartServive *CartServive) DeleteInCart(userId, productId int) error {
+func (CartService *CartService) DeleteInCart(userId, productId int) error {
 	query := fmt.Sprintf("WHERE user_id = %d AND product_id = %d", userId, productId)
 	result, err := CartDao.FindByCondition(query)
 	if err != nil {
@@ -78,7 +78,7 @@ func (CartServive *CartServive) DeleteInCart(userId, productId int) error {
 	}
 }
 
-func (CartServive *CartServive) GetCartByUserId(userId int) ([]models.CartResponseModel, error) {
+func (CartService *CartService) GetCartByUserId(userId int) ([]models.CartResponseModel, error) {
 	condition := fmt.Sprintf("WHERE user_id = %d", userId)
 	cart, err := CartDao.FindByCondition(condition)
 	if err != nil {
@@ -106,4 +106,17 @@ func (CartServive *CartServive) GetCartByUserId(userId int) ([]models.CartRespon
 		cartResponse = append(cartResponse, item)
 	}
 	return cartResponse, nil
+}
+
+func (CartService *CartService) DeleteAllCart(userId int) error {
+	items, err := CartService.GetCartByUserId(userId)
+	if err != nil {
+		return errors.New(fmt.Sprintf("Error when getting Cart"))
+	}
+	for i := 0; i < len(items); i++ {
+		if err := CartDao.Delete(userId, items[i].Product.ProductId); err != nil {
+			return errors.New(fmt.Sprintf("Error when deleting product"))
+		}
+	}
+	return nil
 }

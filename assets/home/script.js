@@ -186,6 +186,7 @@ function getAllNotifications() {
             }
         },
         error: function (jqXHR) {
+            console.log(jqXHR)
             if(jqXHR.status === 403) {
                 return false;
             }
