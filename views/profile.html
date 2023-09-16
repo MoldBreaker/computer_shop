@@ -1,442 +1,273 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>VTShop</title>
-    <link rel="icon" type="image/x-icon" href="/home/img/logovt.png" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <link rel="stylesheet" href="/home/dropdown.css" />
-
-    <!-- Bootstrap icons-->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="/home/styles.css" rel="stylesheet" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <link rel="stylesheet" href="/home/searchbar.css" />
-    <link rel="stylesheet" href="userProfile/profile.css" />
-    <style>
-      a {
-        text-decoration: none;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container px-4 px-lg-5">
-        <a class="navbar-brand" href="/"
-          ><img
-            src="/home/img/logovt.png"
-            style="width: 85px; height: 50px; border-radius: 10%"
-        /></a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Home</a>
-            </li>
-            <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                id="navbarDropdown"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                >Shop</a
-              >
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#!">All Products</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
-              </ul>
-            </li>
-          </ul>
-
-          {{if .User }}
-          <form class="d-flex">
-            <a href="/cart" class="btn btn-outline-dark" type="submit">
-              <i class="bi-cart-fill me-1"></i>
-              Cart
-              <span
-                class="badge bg-dark text-white ms-1 rounded-pill"
-                id="cart-count"
-                >0</span
-              >
-            </a>
-          </form>
+{{define "body"}}
+<link rel="stylesheet" href="/userProfile/profile.css" />
+<input type="hidden" id="current-id" value="{{.User.UserId}}" />
+<section class="h-100 gradient-custom-2" id="info-container">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-9 col-xl-7">
+        <div class="card">
           <div
-            style="
-              display: inline-block;
-              position: relative;
-              overflow: hidden;
-              border-radius: 50%;
-              margin-left: 40px;
-            "
-          >
-            {{if eq .User.Avatar ""}}
-            <img
-              src="/home/img/user.png"
-              style="width: 40px; height: 40px"
-              alt="{{.User.Username}}"
-            />
-            {{else}}
-            <img
-              src="{{.User.Avatar}}"
-              style="width: 40px; height: 40px"
-              alt="{{.User.Username}}"
-            />
-            {{end}}
-          </div>
-          {{else}}
-          <form method="GET" action="/auth" class="d-flex">
-            <button class="btn btn-outline-dark" type="submit">
-              Login / Signup
-            </button>
-          </form>
-          {{end}}
-        </div>
-      </div>
-    </nav>
-
-    <input type="hidden" id="current-id" value="{{.User.UserId}}" />
-    <section class="h-100 gradient-custom-2" id="info-container">
-      <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-          <div class="col col-lg-9 col-xl-7">
-            <div class="card">
-              <div
-                class="rounded-top text-white d-flex flex-row"
-                style="background-color: #000; height: 200px"
-                id="userinfo"
-              ></div>
-              <div class="p-4 text-black" style="background-color: #f8f9fa">
-                <div class="d-flex justify-content-end text-center py-1">
-                  <div>
-                    <p class="mb-1 h5">253</p>
-                    <p class="small text-muted mb-0">Photos</p>
-                  </div>
-                  <div class="px-3">
-                    <p class="mb-1 h5">1026</p>
-                    <p class="small text-muted mb-0">Followers</p>
-                  </div>
-                  <div>
-                    <p class="mb-1 h5">478</p>
-                    <p class="small text-muted mb-0">Following</p>
-                  </div>
-                </div>
+            class="rounded-top text-white d-flex flex-row"
+            style="background-color: #000; height: 200px"
+            id="userinfo"
+          ></div>
+          <div class="p-4 text-black" style="background-color: #f8f9fa">
+            <div class="d-flex justify-content-end text-center py-1">
+              <div>
+                <p class="mb-1 h5">253</p>
+                <p class="small text-muted mb-0">Photos</p>
               </div>
-              <div class="card-body p-4 text-black">
-                <div class="mb-5">
-                  <p class="lead fw-normal mb-1">About</p>
-                  <div class="p-4" style="background-color: #f8f9fa">
-                    <p style="font-weight: bold; font-size: 16px">Phone:</p>
-                    {{if eq .User.Phone ""}}
-                    <p class="font-italic mb-1">Not have yet</p>
-                    {{else}}
-                    <p class="font-italic mb-1">{{.User.Phone}}</p>
-                    {{end}}
-                    <br />
-                    <p style="font-weight: bold; font-size: 16px">Address:</p>
-                    {{if eq .User.Address ""}}
-                    <p class="font-italic mb-1">Not have yet</p>
-                    {{else}}
-                    <p class="font-italic mb-1">{{.User.Address}}</p>
-                    {{end}}
-                  </div>
-                </div>
-                <div
-                  class="d-flex justify-content-between align-items-center mb-4"
-                >
-                  <p class="lead fw-normal mb-0">Recent photos</p>
-                  <p class="mb-0">
-                    <a href="#!" class="text-muted">Show all</a>
-                  </p>
-                </div>
-                <div class="row g-2">
-                  <div class="col mb-2">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
-                      alt="image 1"
-                      class="w-100 rounded-3"
-                    />
-                  </div>
-                  <div class="col mb-2">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(107).webp"
-                      alt="image 1"
-                      class="w-100 rounded-3"
-                    />
-                  </div>
-                </div>
-                <div class="row g-2">
-                  <div class="col">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(108).webp"
-                      alt="image 1"
-                      class="w-100 rounded-3"
-                    />
-                  </div>
-                  <div class="col">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp"
-                      alt="image 1"
-                      class="w-100 rounded-3"
-                    />
-                  </div>
-                </div>
+              <div class="px-3">
+                <p class="mb-1 h5">1026</p>
+                <p class="small text-muted mb-0">Followers</p>
+              </div>
+              <div>
+                <p class="mb-1 h5">478</p>
+                <p class="small text-muted mb-0">Following</p>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="form-avatar"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">
-              Choose your avatar
-            </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <div class="mb-3">
-              <form
-                action="/api/users/avatar"
-                method="post"
-                enctype="multipart/form-data"
-                id="change-avatar-form"
-              >
-                <input
-                  class="form-control"
-                  type="file"
-                  name="avatar"
-                  id="avatar"
+          <div class="card-body p-4 text-black">
+            <div class="mb-5">
+              <p class="lead fw-normal mb-1">About</p>
+              <div class="p-4" style="background-color: #f8f9fa">
+                <p style="font-weight: bold; font-size: 16px">Phone:</p>
+                {{if eq .User.Phone ""}}
+                <p class="font-italic mb-1">Not have yet</p>
+                {{else}}
+                <p class="font-italic mb-1">{{.User.Phone}}</p>
+                {{end}}
+                <br />
+                <p style="font-weight: bold; font-size: 16px">Address:</p>
+                {{if eq .User.Address ""}}
+                <p class="font-italic mb-1">Not have yet</p>
+                {{else}}
+                <p class="font-italic mb-1">{{.User.Address}}</p>
+                {{end}}
+              </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <p class="lead fw-normal mb-0">Recent photos</p>
+              <p class="mb-0">
+                <a href="#!" class="text-muted">Show all</a>
+              </p>
+            </div>
+            <div class="row g-2">
+              <div class="col mb-2">
+                <img
+                  src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
+                  alt="image 1"
+                  class="w-100 rounded-3"
                 />
-                <span id="avatar-error" class="text-danger"></span>
-              </form>
+              </div>
+              <div class="col mb-2">
+                <img
+                  src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(107).webp"
+                  alt="image 1"
+                  class="w-100 rounded-3"
+                />
+              </div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-            <button
-              type="button"
-              id="change-avatar-save-btn"
-              class="btn btn-primary"
-              onclick="handlerChangeAvatar()"
-            >
-              Save changes
-            </button>
+            <div class="row g-2">
+              <div class="col">
+                <img
+                  src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(108).webp"
+                  alt="image 1"
+                  class="w-100 rounded-3"
+                />
+              </div>
+              <div class="col">
+                <img
+                  src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp"
+                  alt="image 1"
+                  class="w-100 rounded-3"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- Modal Update Information -->
-    <div
-      class="modal fade"
-      id="update-infomation-form"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">
-              Update Your Information
-            </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="form-avatar"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Choose your avatar
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <form
+            action="/api/users/avatar"
+            method="post"
+            enctype="multipart/form-data"
+            id="change-avatar-form"
+          >
+            <input class="form-control" type="file" name="avatar" id="avatar" />
+            <span id="avatar-error" class="text-danger"></span>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          id="change-avatar-save-btn"
+          class="btn btn-primary"
+          onclick="handlerChangeAvatar()"
+        >
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Update Information -->
+<div
+  class="modal fade"
+  id="update-infomation-form"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Update Your Information
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <form id="info-form">
             <div class="mb-3">
-              <form id="info-form">
-                <div class="mb-3">
-                  <label for="phone" class="form-label">Your Phone</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="phone"
-                    name="phone"
-                  />
-                  <span id="phone-error" class="text-danger"></span>
-                  <label for="phone" class="form-label">Your Address</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="address"
-                    name="address"
-                  />
-                  <span id="address-error" class="text-danger"></span>
-                </div>
-              </form>
+              <label for="phone" class="form-label">Your Phone</label>
+              <input type="text" class="form-control" id="phone" name="phone" />
+              <span id="phone-error" class="text-danger"></span>
+              <label for="phone" class="form-label">Your Address</label>
+              <input
+                type="text"
+                class="form-control"
+                id="address"
+                name="address"
+              />
+              <span id="address-error" class="text-danger"></span>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-            <button
-              type="button"
-              id="update-information-save-btn"
-              class="btn btn-primary"
-              onclick="handlerUpdateInfo(this)"
-            >
-              Save changes
-            </button>
-          </div>
+          </form>
         </div>
       </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          id="update-information-save-btn"
+          class="btn btn-primary"
+          onclick="handlerUpdateInfo(this)"
+        >
+          Save changes
+        </button>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!--    ChangePass-->
-    <div
-      class="modal fade"
-      id="changePassword"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">
-              Change Password
-            </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
+<!--    ChangePass-->
+<div
+  class="modal fade"
+  id="changePassword"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Change Password</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <form id="changepass-form">
             <div class="mb-3">
-              <form id="changepass-form">
-                <div class="mb-3">
-                  <label for="oldpassword" class="form-label"
-                    >Old Password</label
-                  >
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="oldpassword"
-                    name="oldpassword"
-                  />
-                  <span id="old-password-error" class="text-danger"></span>
-                  <label for="newpassword" class="form-label"
-                    >New Password</label
-                  >
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="newpassword"
-                    name="newpassword"
-                  />
-                  <span id="new-password-error" class="text-danger"></span>
-                  <label for="cnewpassword" class="form-label"
-                    >Confirm New Password</label
-                  >
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="cnewpassword"
-                    name="cnewpassword"
-                  />
-                  <span
-                    id="confirm-new-password-error"
-                    class="text-danger"
-                  ></span>
-                </div>
-              </form>
+              <label for="oldpassword" class="form-label">Old Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="oldpassword"
+                name="oldpassword"
+              />
+              <span id="old-password-error" class="text-danger"></span>
+              <label for="newpassword" class="form-label">New Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="newpassword"
+                name="newpassword"
+              />
+              <span id="new-password-error" class="text-danger"></span>
+              <label for="cnewpassword" class="form-label"
+                >Confirm New Password</label
+              >
+              <input
+                type="password"
+                class="form-control"
+                id="cnewpassword"
+                name="cnewpassword"
+              />
+              <span id="confirm-new-password-error" class="text-danger"></span>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-            <button
-              type="button"
-              id="change-password-save-btn"
-              class="btn btn-primary"
-              onclick="handlerChangePassword()"
-            >
-              Save changes
-            </button>
-          </div>
+          </form>
         </div>
       </div>
-    </div>
-
-    <!-- Footer-->
-    <footer class="py-5 bg-dark">
-      <div class="container">
-        <p class="m-0 text-center text-white">Copyright VTSHOP Website 2023</p>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          id="change-password-save-btn"
+          class="btn btn-primary"
+          onclick="handlerChangePassword()"
+        >
+          Save changes
+        </button>
       </div>
-    </footer>
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/pagination/pagination.js"></script>
-    <!-- Core theme JS-->
-    <script src="/home/script.js"></script>
-    <script src="/userProfile/profile.js"></script>
-  </body>
-</html>
+    </div>
+  </div>
+</div>
+<script src="/userProfile/profile.js"></script>
+
+{{end}}

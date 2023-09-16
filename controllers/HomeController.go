@@ -12,7 +12,7 @@ type HomeController struct{}
 
 func (HomeController *HomeController) RenderHomePage(e echo.Context) error {
 	userSession, _ := helpers.GetSession("user", e)
-	tmpl := template.Must(template.ParseFiles("views/home.html"))
+	tmpl, _ := template.ParseFiles("views/template/homeTemplate.html", "views/home.html")
 	return tmpl.Execute(e.Response(), map[string]interface{}{
 		"User": userSession,
 	})
@@ -29,7 +29,7 @@ func (HomeController *HomeController) RenderAuthPage(e echo.Context) error {
 
 func (HomeController *HomeController) RenderProductDetailPage(e echo.Context) error {
 	userSession, _ := helpers.GetSession("user", e)
-	tmpl := template.Must(template.ParseFiles("views/productDetail.html"))
+	tmpl, _ := template.ParseFiles("views/template/homeTemplate.html", "views/productDetail.html")
 	return tmpl.Execute(e.Response(), map[string]interface{}{
 		"User": userSession,
 	})
@@ -37,7 +37,7 @@ func (HomeController *HomeController) RenderProductDetailPage(e echo.Context) er
 
 func (HomeController *HomeController) RenderCartPage(e echo.Context) error {
 	userSession, _ := helpers.GetSession("user", e)
-	tmpl := template.Must(template.ParseFiles("views/cart.html"))
+	tmpl, _ := template.ParseFiles("views/template/homeTemplate.html", "views/cart.html")
 	return tmpl.Execute(e.Response(), map[string]interface{}{
 		"User": userSession,
 	})
@@ -45,7 +45,7 @@ func (HomeController *HomeController) RenderCartPage(e echo.Context) error {
 
 func (HomeController *HomeController) RenderProfilePage(e echo.Context) error {
 	userSession, _ := helpers.GetSession("user", e)
-	tmpl := template.Must(template.ParseFiles("views/profile.html"))
+	tmpl, _ := template.ParseFiles("views/template/homeTemplate.html", "views/profile.html")
 	return tmpl.Execute(e.Response(), map[string]interface{}{
 		"User": userSession,
 	})
@@ -53,7 +53,7 @@ func (HomeController *HomeController) RenderProfilePage(e echo.Context) error {
 
 func (HomeController *HomeController) RenderCheckoutPage(e echo.Context) error {
 	userSession, _ := helpers.GetSession("user", e)
-	tmpl := template.Must(template.ParseFiles("views/checkout.html"))
+	tmpl, _ := template.ParseFiles("views/template/homeTemplate.html", "views/checkout.html")
 	return tmpl.Execute(e.Response(), map[string]interface{}{
 		"User": userSession,
 	})

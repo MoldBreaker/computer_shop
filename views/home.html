@@ -1,268 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>VTShop</title>
-    <link rel="icon" type="image/x-icon" href="/home/img/logovt.png" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <link rel="stylesheet" href="/home/dropdown.css" />
-
-    <!-- Bootstrap icons-->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="/home/styles.css" rel="stylesheet" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <link rel="stylesheet" href="/home/searchbar.css" />
-    <style>
-      a {
-        text-decoration: none;
-      }
-      a:hover {
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container px-4 px-lg-5">
-        <a class="navbar-brand" href="/"
-          ><img
-            src="/home/img/logovt.png"
-            style="width: 85px; height: 50px; border-radius: 10%"
-        /></a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Home</a>
-            </li>
-            {{if .User}} {{if eq .User.RoleId 9}}
-            <li class="nav-item">
-              <a class="nav-link" href="/dashboard">Dashboard</a>
-            </li>
-            {{else}} {{end}} {{else}} {{end}}
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                id="navbarDropdown"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                >Shop</a
-              >
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#!">All Products</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
-              </ul>
-            </li>
-          </ul>
-
-          {{if .User }}
-          <a
-            class="notification"
-            style="color: black"
-            data-bs-toggle="modal"
-            data-bs-target="#notifications-list"
-            id="notification-bell"
-          >
-            <span><i class="fa fa-bell" aria-hidden="true"></i></span>
-            <span class="notifications-count" id="notifications-count"></span>
-          </a>
-          <form class="d-flex">
-            <a href="/cart" class="btn btn-outline-dark" type="submit">
-              <i class="bi-cart-fill me-1"></i>
-              Cart
-              <span
-                class="badge bg-dark text-white ms-1 rounded-pill"
-                id="cart-count"
-                >0</span
-              >
-            </a>
-          </form>
-          <div
-            style="
-              display: inline-block;
-              position: relative;
-              overflow: hidden;
-              border-radius: 50%;
-              margin-left: 40px;
-            "
-          >
-            {{if eq .User.Avatar ""}}
-            <a href="/profile/{{.User.UserId}}">
-              <img
-                src="/home/img/user.png"
-                style="width: 40px; height: 40px"
-                alt="{{.User.Username}}"
-              />
-            </a>
-            {{else}}
-            <a href="/profile/{{.User.UserId}}">
-              <img
-                src="{{.User.Avatar}}"
-                style="width: 40px; height: 40px"
-                alt="{{.User.Username}}"
-              />
-            </a>
-            {{end}}
-          </div>
-          {{else}}
-          <form method="GET" action="/auth" class="d-flex">
-            <button class="btn btn-outline-dark" type="submit">
-              Login / Signup
-            </button>
-          </form>
-          {{end}}
-        </div>
-      </div>
-    </nav>
-    <!-- Header-->
-    <header class="bg-dark py-5">
-      <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-          <h1 class="display-4 fw-bolder">Welcome to VTSHOP</h1>
-          <p class="lead fw-normal text-white-50 mb-0">
-            With this shop hompeage template
-          </p>
-        </div>
-      </div>
-    </header>
-    <div id="search-bar">
-      <div class="dropdown">
-        <button onclick="showCategories()" class="dropbtn">Category</button>
-        <div id="categories-dropdown" class="dropdown-content"></div>
-      </div>
-      <div class="dropdown">
-        <button onclick="myFunction()" class="dropbtn">Choose according</button>
-        <div id="myDropdown" class="dropdown-content">
-          <a class="sort-li" href="#" data-col="product_name" data-sort="DESC"
-            >Decrease by name</a
-          >
-          <a class="sort-li" href="#" data-col="product_name" data-sort="ASC"
-            >Increase by name</a
-          >
-          <a class="sort-li" href="#" data-col="price" data-sort="DESC"
-            >Decrease by price</a
-          >
-          <a class="sort-li" href="#" data-col="price" data-sort="ASC"
-            >Increase by price</a
-          >
-        </div>
-      </div>
-      <input
-        type="text"
-        placeholder="What are you looking for?"
-        name="search"
-        id="search-value"
-      />
-      <button id="search-btn" type="submit">
-        <i class="fa fa-search"></i>
-      </button>
-      <br />
-      <span class="text-warning" id="search-warning"></span>
+{{define "body"}}
+<!-- Header-->
+<header class="bg-dark py-5">
+  <div class="container px-4 px-lg-5 my-5">
+    <div class="text-center text-white">
+      <h1 class="display-4 fw-bolder">Welcome to VTSHOP</h1>
+      <p class="lead fw-normal text-white-50 mb-0">
+        With this shop hompeage template
+      </p>
     </div>
-
-    <!-- Section-->
-    <section class="py-5">
-      <div class="container px-4 px-lg-5 mt-5">
-        <div
-          class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
-          id="items-container"
-        ></div>
-      </div>
-    </section>
-
-    <!-- Pagination -->
-    <div class="be-wrapper">
-      <div class="container">
-        <div class="demo">
-          <div id="page">
-            <ul class="pagination"></ul>
-          </div>
-        </div>
-      </div>
+  </div>
+</header>
+<div id="search-bar">
+  <div class="dropdown">
+    <button onclick="showCategories()" class="dropbtn">Category</button>
+    <div id="categories-dropdown" class="dropdown-content"></div>
+  </div>
+  <div class="dropdown">
+    <button onclick="myFunction()" class="dropbtn">Choose according</button>
+    <div id="myDropdown" class="dropdown-content">
+      <a class="sort-li" href="#" data-col="product_name" data-sort="DESC"
+        >Decrease by name</a
+      >
+      <a class="sort-li" href="#" data-col="product_name" data-sort="ASC"
+        >Increase by name</a
+      >
+      <a class="sort-li" href="#" data-col="price" data-sort="DESC"
+        >Decrease by price</a
+      >
+      <a class="sort-li" href="#" data-col="price" data-sort="ASC"
+        >Increase by price</a
+      >
     </div>
+  </div>
+  <input
+    type="text"
+    placeholder="What are you looking for?"
+    name="search"
+    id="search-value"
+  />
+  <button id="search-btn" type="submit">
+    <i class="fa fa-search"></i>
+  </button>
+  <br />
+  <span class="text-warning" id="search-warning"></span>
+</div>
 
+<!-- Section-->
+<section class="py-5">
+  <div class="container px-4 px-lg-5 mt-5">
     <div
-      class="modal fade"
-      id="notifications-list"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">
-              Notifications
-            </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <div class="mb-3" id="notification-body"></div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+      class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
+      id="items-container"
+    ></div>
+  </div>
+</section>
+
+<!-- Pagination -->
+<div class="be-wrapper">
+  <div class="container">
+    <div class="demo">
+      <div id="page">
+        <ul class="pagination"></ul>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- Footer-->
-    <footer class="py-5 bg-dark">
-      <div class="container">
-        <p class="m-0 text-center text-white">
-          𝙲𝚘𝚗𝚝𝚊𝚌𝚝 𝚞𝚜
-          <a target="_blank" href="https://www.facebook.com/vtshop2023/"
-            ><i class="fa fa-facebook" aria-hidden="true"></i
-          ></a>
-          <br />
-          Copyright VTSHOP Website 2023
-        </p>
-      </div>
-    </footer>
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/pagination/pagination.js"></script>
-    <!-- Core theme JS-->
-    <script src="/home/script.js"></script>
-  </body>
-</html>
+<script src="/home/script.js"></script>
+{{end}}

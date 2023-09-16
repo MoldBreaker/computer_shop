@@ -1,76 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Auth</title>
-    <link rel="stylesheet" href="/Auth/Auth.css"/>
+    <link rel="stylesheet" href="/Auth/Auth.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-</head>
-<body>
-<section class="forms-section">
-    <h1 class="section-title">
+  </head>
+  <body>
+    <section class="forms-section">
+      <h1 class="section-title">
         <a href="/">
-            <link rel="icon" type="image/x-icon" href="/home/img/logovt.png" >
+          <link rel="icon" type="image/x-icon" href="/home/img/logovt.png" />
         </a>
-    </h1>
-    <div class="forms">
+      </h1>
+      <div class="forms">
         <div class="form-wrapper is-active">
-            <button type="button" class="switcher switcher-login">
-                Login
-                <span class="underline"></span>
+          <button type="button" class="switcher switcher-login">
+            Login
+            <span class="underline"></span>
+          </button>
+          <form class="form form-login" id="login-form">
+            <fieldset>
+              <legend>Please, enter your email and password for login.</legend>
+              <div class="input-block">
+                <label for="login-email">E-mail</label>
+                <input id="login-email" name="email" type="email" required />
+                <span class="err-text" id="login-email-err"></span>
+              </div>
+              <div class="input-block">
+                <label for="login-password">Password</label>
+                <input
+                  id="login-password"
+                  name="password"
+                  type="password"
+                  required
+                />
+                <span class="err-text" id="login-password-err"></span>
+              </div>
+            </fieldset>
+            <button type="submit" id="btn-login" class="btn-login">
+              Login
             </button>
-            <form class="form form-login" id="login-form">
-                <fieldset>
-                    <legend>Please, enter your email and password for login.</legend>
-                    <div class="input-block">
-                        <label for="login-email">E-mail</label>
-                        <input id="login-email" name="email" type="email" required>
-                        <span class="err-text" id="login-email-err"></span>
-                    </div>
-                    <div class="input-block">
-                        <label for="login-password">Password</label>
-                        <input id="login-password" name="password" type="password" required>
-                        <span class="err-text" id="login-password-err"></span>
-                    </div>
-                </fieldset>
-                <button type="submit" id="btn-login" class="btn-login">Login</button>
-            </form>
+          </form>
         </div>
         <div class="form-wrapper">
-            <button type="button" class="switcher switcher-signup">
-                Sign Up
-                <span class="underline"></span>
+          <button type="button" class="switcher switcher-signup">
+            Sign Up
+            <span class="underline"></span>
+          </button>
+          <form class="form form-signup" id="signup-form">
+            <fieldset>
+              <legend>
+                Please, enter your email, password and password confirmation for
+                sign up.
+              </legend>
+              <div class="input-block">
+                <label for="signup-username">Username</label>
+                <input
+                  id="signup-username"
+                  name="user_name"
+                  type="text"
+                  required
+                />
+                <span class="err-text" id="signup-username-err"></span>
+              </div>
+              <div class="input-block">
+                <label for="signup-email">E-mail</label>
+                <input id="signup-email" name="email" type="email" required />
+                <span class="err-text" id="signup-email-err"></span>
+              </div>
+              <div class="input-block">
+                <label for="signup-password">Password</label>
+                <input
+                  id="signup-password"
+                  name="password"
+                  type="password"
+                  required
+                />
+                <span class="err-text" id="signup-password-err"></span>
+              </div>
+              <div class="input-block">
+                <label for="signup-password-confirm">Confirm password</label>
+                <input
+                  id="signup-password-confirm"
+                  name="cpassword"
+                  type="password"
+                  required
+                />
+                <span class="err-text" id="signup-cpassword-err"></span>
+              </div>
+            </fieldset>
+            <button type="submit" id="btn-signup" class="btn-signup">
+              Continue
             </button>
-            <form class="form form-signup" id="signup-form">
-                <fieldset>
-                    <legend>Please, enter your email, password and password confirmation for sign up.</legend>
-                    <div class="input-block">
-                        <label for="signup-username">Username</label>
-                        <input id="signup-username" name="user_name" type="text" required>
-                        <span class="err-text" id="signup-username-err"></span>
-                    </div>
-                    <div class="input-block">
-                        <label for="signup-email">E-mail</label>
-                        <input id="signup-email" name="email" type="email" required>
-                        <span class="err-text" id="signup-email-err"></span>
-                    </div>
-                    <div class="input-block">
-                        <label for="signup-password">Password</label>
-                        <input id="signup-password" name="password" type="password" required>
-                        <span class="err-text" id="signup-password-err"></span>
-                    </div>
-                    <div class="input-block">
-                        <label for="signup-password-confirm">Confirm password</label>
-                        <input id="signup-password-confirm" name="cpassword" type="password" required>
-                        <span class="err-text" id="signup-cpassword-err"></span>
-                    </div>
-                </fieldset>
-                <button type="submit" id="btn-signup" class="btn-signup">Continue</button>
-            </form>
+          </form>
         </div>
-    </div>
-</section>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="/Auth/Auth.js"></script>
-</body>
+      </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/Auth/Auth.js"></script>
+  </body>
 </html>
