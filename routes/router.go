@@ -74,7 +74,9 @@ func InitWebRoutes() {
 
 		role := api.Group("/role")
 		{
+			role.GET("/", RoleController.GettAllRoles)
 			role.POST("/", RoleController.CreateRole, AuthMiddleware.IsLogined, AuthMiddleware.IsSuperAdmin)
+			role.PUT("/:id", RoleController.UpdateUserRole, AuthMiddleware.IsLogined, AuthMiddleware.IsSuperAdmin)
 		}
 
 		invoices := api.Group("/invoices")

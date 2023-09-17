@@ -3,6 +3,7 @@ package services
 import (
 	"computer_shop/dao"
 	"computer_shop/models"
+	"errors"
 )
 
 type RoleService struct {
@@ -23,4 +24,13 @@ func (RoleService *RoleService) GetRoleById(id int) models.RoleModel {
 }
 func (RoleService *RoleService) GetAllRoles() ([]models.RoleModel, error) {
 	return RoleDAO.FindAll()
+}
+
+func (RoleService *RoleService) UpdateUserRole(userId, roleId int) error {
+	user, err := UserDAO.FindById(userId)
+	if err != nil {
+		return errors.New("Error when getting user")
+	}
+	user.RoleId = roleId
+	return UserDAO.Update(user)
 }

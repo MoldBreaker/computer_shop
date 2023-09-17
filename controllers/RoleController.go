@@ -4,8 +4,10 @@ import (
 	"computer_shop/helpers"
 	"computer_shop/models"
 	"computer_shop/services"
-	"github.com/labstack/echo/v4"
 	"net/http"
+	"strconv"
+
+	"github.com/labstack/echo/v4"
 )
 
 type RoleController struct{}
@@ -27,5 +29,40 @@ func (RoleController *RoleController) CreateRole(e echo.Context) error {
 	id := RoleService.UpdateRole(roleModel)
 	return e.JSON(http.StatusOK, map[string]interface{}{
 		"role": RoleService.GetRoleById(id),
+	})
+}
+
+func (RoleController *RoleController) UpdateUserRole(e echo.Context) error {
+	userIdStr := e.Param("id")
+	userId, err := strconv.Atoi(userIdStr)
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": "Invalid user id",
+		})
+	}
+	var roleModel models.RoleModel
+	if err := e.Bind(&roleModel); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid role code")
+	}
+	errResult := RoleService.UpdateUserRole(userId, roleModel.RoleId)
+	if errResult != nil {
+		return e.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": errResult.Error(),
+		})
+	}
+	return e.JSON(http.StatusOK, map[string]interface{}{
+		"message": "Updated user role successfully",
+	})
+}
+
+func (RoleController *RoleController) GettAllRoles(e echo.Context) error {
+	roles, err := RoleService.GetAllRoles()
+	if err != nil {
+		return e.JSON(http.StatusOK, map[string]interface{}{
+			"message": err.Error(),
+		})
+	}
+	return e.JSON(http.StatusOK, map[string]interface{}{
+		"roles": roles,
 	})
 }

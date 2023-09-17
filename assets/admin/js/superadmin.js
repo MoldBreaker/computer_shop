@@ -31,7 +31,10 @@ function renderUserTable() {
                     })}</td>
                     <td>${formattedDate}</td>
                     <td>${users[i].password == "" ? "Blocked" : "Active"}</td>
-                    <td><button data-id="${users[i].user_id}" onclick="blockUser(this)" type="button" class="btn btn-danger">Block</button></td>
+                    <td>
+                        <button data-id="${users[i].user_id}" onclick="blockUser(this)" type="button" class="btn btn-danger">Block</button>
+                        <button data-id="${users[i].user_id}" data-role="${users[i].role_id}" onclick="updateRole(this)" type="button" class="btn btn-primary">Update Role</button>
+                    </td>
                 </tr>
                 `
             }
@@ -42,9 +45,72 @@ function renderUserTable() {
         }
     })
 }
+function getRolesObject(e) {
+    $.ajax({
+        type: "GET",
+        url: "/api/role/",
+        dataType: "JSON",
+        success: function (response) {
+            let data = {};
+            for(let i=0; i<response.roles.length; i++){
+                if(response.roles[i].role_name == 'super_admin' || response.roles[i].role_id == e.dataset.role){
+                    continue;
+                } else {
+                    data[response.roles[i].role_id] = response.roles[i].role_name;
+                }
+            }
+            selectOptionSwal(data, e.dataset.id)
+        }
+    });
+}
+
+function selectOptionSwal(data, userId) {
+    Swal.fire({
+        title: 'Select Role',
+        input: 'select',
+        inputOptions: data,
+        inputPlaceholder: 'required',
+        showCancelButton: true,
+        inputValidator: function (value) {
+          return new Promise(function (resolve, reject) {
+            if (value !== '') {
+              resolve();
+            } else {
+              resolve('You need to select a Role');
+            }
+          });
+        }
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "PUT",
+            url: "/api/role/" + userId,
+            data: {
+                role_id: result.value
+            },
+            dataType: "JSON",
+            success: function (response) {
+                window.location.reload();
+            }, 
+            error: function (jqXHR){
+                if(err.status == 400){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: jqXHR.responseJSON.message,
+                    })
+                }
+            }
+          });
+        }
+      });
+}
+
+function updateRole(e) {
+    getRolesObject(e)
+}
 
 function blockUser(e){
-    console.log(e.dataset.id)
 
     Swal.fire({
         title: 'Do you want to block this user, that can not be undone?',
