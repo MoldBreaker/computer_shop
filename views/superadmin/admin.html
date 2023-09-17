@@ -1,0 +1,192 @@
+{{define "body"}}
+<link rel="stylesheet" href="/home/searchbar.css" />
+<link rel="stylesheet" href="/home/dropdown.css" />
+<h1>Hello wworld from Admin</h1>
+
+<div
+  class="button-group"
+  style="
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  "
+>
+  <button
+    type="button"
+    class="btn btn-primary"
+    style="width: 150px; gap: 20px"
+    id="add-product-btn"
+    data-bs-toggle="modal"
+    data-bs-target="#modify-modal"
+  >
+    Add a Product
+  </button>
+</div>
+
+<div id="search-bar">
+  <div class="dropdown">
+    <button onclick="showCategories()" class="dropbtn">Category</button>
+    <div id="categories-dropdown" class="dropdown-content"></div>
+  </div>
+  <div class="dropdown">
+    <button onclick="myFunction()" class="dropbtn">Choose according</button>
+    <div id="myDropdown" class="dropdown-content">
+      <a class="sort-li" href="#" data-col="product_name" data-sort="DESC"
+        >Decrease by name</a
+      >
+      <a class="sort-li" href="#" data-col="product_name" data-sort="ASC"
+        >Increase by name</a
+      >
+      <a class="sort-li" href="#" data-col="price" data-sort="DESC"
+        >Decrease by price</a
+      >
+      <a class="sort-li" href="#" data-col="price" data-sort="ASC"
+        >Increase by price</a
+      >
+    </div>
+  </div>
+  <input
+    type="text"
+    placeholder="What are you looking for?"
+    name="search"
+    id="search-value"
+  />
+  <button id="search-btn" type="submit">
+    <i class="fa fa-search"></i>
+  </button>
+  <br />
+  <span class="text-warning" id="search-warning"></span>
+</div>
+<div class="container text-center">
+  <div class="row row-cols-4" id="items-container"></div>
+</div>
+<!-- Pagination -->
+<div
+  class="mt-4"
+  style="
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  "
+>
+  <div class="be-wrapper">
+    <div class="container">
+      <div class="demo">
+        <div id="page">
+          <ul class="pagination"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal-->
+<div
+  class="modal fade"
+  id="modify-modal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Enter Product Detail
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <form
+            action="/api/products/"
+            method="POST"
+            enctype="multipart/form-data"
+            id="product-form"
+          >
+            <input type="hidden" id="product-id" name="product_id" />
+            <!-- Product Name -->
+            <div class="mb-3">
+              <label for="inputProductName" class="form-label"
+                >Product Name</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="inputProductName"
+                name="product_name"
+              />
+            </div>
+            <span id="name-error" class="text-danger"></span>
+            <!-- Product Description -->
+            <div class="mb-3">
+              <label for="exampleFormControlTextarea1" class="form-label"
+                >Product Description</label
+              >
+              <textarea
+                class="form-control"
+                id="inputProductDescription"
+                rows="3"
+                name="description"
+              ></textarea>
+            </div>
+            <span id="description-error" class="text-danger"></span>
+            <!-- Product Price -->
+            <div class="mb-3">
+              <label for="inputProductPrice" class="form-label"
+                >Product Price</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="inputProductPrice"
+                name="price"
+              />
+            </div>
+            <span id="price-error" class="text-danger"></span>
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              name="category_id"
+              id="category-list"
+            ></select>
+            <span id="category-error" class="text-danger"></span>
+            <input
+              class="form-control mt-4"
+              type="file"
+              name="images"
+              id="images"
+              multiple
+            />
+            <span id="images-error" class="text-danger"></span>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          id="close-btn"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+        <button type="button" class="btn btn-primary" id="modify-btn">
+          Create
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/admin/js/admin.js"></script>
+<script src="/pagination/pagination.js"></script>
+{{end}}

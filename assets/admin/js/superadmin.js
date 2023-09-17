@@ -1,20 +1,20 @@
 
-$(document).ready(function() {
+$(document).ready(function () {
     renderUserTable();
 })
 
 function renderUserTable() {
     $.ajax({
-        method : 'GET',
-        url : '/api/users/',
-        dataType : 'json',
-        success : function(data) {
+        method: 'GET',
+        url: '/api/users/',
+        dataType: 'json',
+        success: function (data) {
             let html = ''
             let users = data.users
             let roles = data.roles
-            for (let i = 0; i < users.length;i++){
+            for (let i = 0; i < users.length; i++) {
                 const dateString = users[i].created_at;
-                const dateArray = dateString.split("T"); 
+                const dateArray = dateString.split("T");
                 const datePortion = dateArray[0];
                 const parts = datePortion.split("-");
                 const formattedDate = `${dateArray[1].split("Z")[0]} ${parts[2]}/${parts[1]}/${parts[0]}`;
@@ -25,10 +25,10 @@ function renderUserTable() {
                     <td>${users[i].phone}</td>
                     <td>${users[i].email}</td>
                     <td>${roles.map(each => {
-                        if(each.role_id == users[i].role_id){
-                            return each.role_name;
-                        }
-                    })}</td>
+                    if (each.role_id == users[i].role_id) {
+                        return each.role_name;
+                    }
+                })}</td>
                     <td>${formattedDate}</td>
                     <td>${users[i].password == "" ? "Blocked" : "Active"}</td>
                     <td>
@@ -40,7 +40,7 @@ function renderUserTable() {
             }
             document.querySelector("tbody").innerHTML = html;
         },
-        error: function(jqXHR) {
+        error: function (jqXHR) {
             console.log(jqXHR.responseJSON.message);
         }
     })
@@ -52,8 +52,8 @@ function getRolesObject(e) {
         dataType: "JSON",
         success: function (response) {
             let data = {};
-            for(let i=0; i<response.roles.length; i++){
-                if(response.roles[i].role_name == 'super_admin' || response.roles[i].role_id == e.dataset.role){
+            for (let i = 0; i < response.roles.length; i++) {
+                if (response.roles[i].role_name == 'super_admin' || response.roles[i].role_id == e.dataset.role) {
                     continue;
                 } else {
                     data[response.roles[i].role_id] = response.roles[i].role_name;
@@ -72,45 +72,45 @@ function selectOptionSwal(data, userId) {
         inputPlaceholder: 'required',
         showCancelButton: true,
         inputValidator: function (value) {
-          return new Promise(function (resolve, reject) {
-            if (value !== '') {
-              resolve();
-            } else {
-              resolve('You need to select a Role');
-            }
-          });
-        }
-      }).then(function (result) {
-        if (result.isConfirmed) {
-          $.ajax({
-            type: "PUT",
-            url: "/api/role/" + userId,
-            data: {
-                role_id: result.value
-            },
-            dataType: "JSON",
-            success: function (response) {
-                window.location.reload();
-            }, 
-            error: function (jqXHR){
-                if(err.status == 400){
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: jqXHR.responseJSON.message,
-                    })
+            return new Promise(function (resolve, reject) {
+                if (value !== '') {
+                    resolve();
+                } else {
+                    resolve('You need to select a Role');
                 }
-            }
-          });
+            });
         }
-      });
+    }).then(function (result) {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "PUT",
+                url: "/api/role/" + userId,
+                data: {
+                    role_id: result.value
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    window.location.reload();
+                },
+                error: function (jqXHR) {
+                    if (err.status == 400) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: jqXHR.responseJSON.message,
+                        })
+                    }
+                }
+            });
+        }
+    });
 }
 
 function updateRole(e) {
     getRolesObject(e)
 }
 
-function blockUser(e){
+function blockUser(e) {
 
     Swal.fire({
         title: 'Do you want to block this user, that can not be undone?',
@@ -123,10 +123,10 @@ function blockUser(e){
                 method: "PUT",
                 url: "/api/users/block/" + e.dataset.id,
                 dataType: "json",
-                success: function(data){
+                success: function (data) {
                     window.location.reload();
                 },
-                error: function(jqXHR) {
+                error: function (jqXHR) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',

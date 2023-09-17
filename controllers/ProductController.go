@@ -92,7 +92,7 @@ func (ProductController *ProductController) CreateProduct(e echo.Context) error 
 	if err := NotificationService.SendNotificationsToAllUser(product.ProductName + " đã được thêm vào cửa hàng"); err != nil {
 		return echo.NewHTTPError(500, err)
 	}
-
+	http.Redirect(e.Response(), e.Request(), e.Request().Header.Get("Referer"), 302)
 	return e.JSON(200, response.Parse(product, urls))
 }
 

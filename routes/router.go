@@ -39,6 +39,7 @@ func InitWebRoutes() {
 	router.GET("/checkout", HomeController.RenderCheckoutPage, AuthMiddleware.IsLogined, CheckCartMiddleware.CheckCartEmpty)
 
 	router.GET("/dashboard", SuperAdminController.RenderSuperAminPage, AuthMiddleware.IsLogined, AuthMiddleware.IsSuperAdmin)
+	router.GET("/admin", SuperAdminController.RenderAdminPage, AuthMiddleware.IsLogined, AuthMiddleware.IsAdminOrSuperAdmin)
 
 	api := router.Group("/api")
 	{

@@ -64,6 +64,10 @@
             <li class="nav-item">
               <a class="nav-link" href="/dashboard">Dashboard</a>
             </li>
+            {{else}} {{end}} {{if eq .User.RoleId 8}}
+            <li class="nav-item">
+              <a class="nav-link" href="/admin">Admin</a>
+            </li>
             {{else}} {{end}} {{else}} {{end}}
             <li class="nav-item dropdown">
               <a
