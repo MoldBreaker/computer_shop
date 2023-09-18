@@ -9,7 +9,7 @@ import (
 )
 
 func GetConnection() *sql.DB {
-	LoadENV()
+	//LoadENV()
 	db, err := sql.Open("mysql", os.Getenv("CONNECTION_STRING"))
 	if err != nil {
 		log.Fatal(err)
