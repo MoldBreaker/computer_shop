@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"computer_shop/config"
 	"computer_shop/controllers"
 	"computer_shop/middlewares"
 	"os"
@@ -26,7 +25,7 @@ var (
 
 func InitWebRoutes() {
 	router := echo.New()
-	config.LoadENV()
+	//config.LoadENV()
 	router.Static("/", "assets")
 
 	router.Use(AuthMiddleware.Auth)
