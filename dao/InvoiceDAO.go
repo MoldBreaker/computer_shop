@@ -19,10 +19,10 @@ CREATE TABLE Invoices (
 );
 */
 
-func (InvoiceDAO *InvoiceDAO) Create(invoice models.InvoiceModel) int {
+func (InvoiceDAO InvoiceDAO) Create(invoice models.InvoiceModel) int {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "INSERT INTO Invoices(user_id, total_price) VALUES(?, ?)"
+	query := "INSERT INTO invoices(user_id, total_price) VALUES(?, ?)"
 	result, err := db.Exec(query, invoice.UserId, invoice.TotalPrice)
 	if err != nil {
 		return -1
@@ -34,10 +34,10 @@ func (InvoiceDAO *InvoiceDAO) Create(invoice models.InvoiceModel) int {
 	return int(id)
 }
 
-func (InvoiceDAO *InvoiceDAO) FindAll() ([]models.InvoiceModel, error) {
+func (InvoiceDAO InvoiceDAO) FindAll() ([]models.InvoiceModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Invoices"
+	query := "SELECT * FROM invoices"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
@@ -54,10 +54,10 @@ func (InvoiceDAO *InvoiceDAO) FindAll() ([]models.InvoiceModel, error) {
 	return Invoices, nil
 }
 
-func (InvoiceDAO *InvoiceDAO) FindById(id int) (models.InvoiceModel, error) {
+func (InvoiceDAO InvoiceDAO) FindById(id int) (models.InvoiceModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Invoices WHERE invoice_id = ?"
+	query := "SELECT * FROM invoices WHERE invoice_id = ?"
 	var Invoice models.InvoiceModel
 	if err := db.QueryRow(query, id).Scan(&Invoice.InvoiceId, &Invoice.UserId, &Invoice.TotalPrice, &Invoice.CreatedAt); err != nil {
 		return Invoice, err
@@ -65,10 +65,10 @@ func (InvoiceDAO *InvoiceDAO) FindById(id int) (models.InvoiceModel, error) {
 	return Invoice, nil
 }
 
-func (InvoiceDAO *InvoiceDAO) Update(invoice models.InvoiceModel) error {
+func (InvoiceDAO InvoiceDAO) Update(invoice models.InvoiceModel) error {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "UPDATE Invoices SET user_id = ?, total_price = ? WHERE invoice_id = ?"
+	query := "UPDATE invoices SET user_id = ?, total_price = ? WHERE invoice_id = ?"
 	_, err := db.Exec(query, invoice.UserId, invoice.TotalPrice, invoice.InvoiceId)
 	if err != nil {
 		return err
@@ -76,10 +76,10 @@ func (InvoiceDAO *InvoiceDAO) Update(invoice models.InvoiceModel) error {
 	return nil
 }
 
-func (InvoiceDAO *InvoiceDAO) Delete(id int) error {
+func (InvoiceDAO InvoiceDAO) Delete(id int) error {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "DELETE FROM Invoices WHERE invoice_id = ?"
+	query := "DELETE FROM invoices WHERE invoice_id = ?"
 	_, err := db.Exec(query, id)
 	if err != nil {
 		return err
@@ -87,10 +87,10 @@ func (InvoiceDAO *InvoiceDAO) Delete(id int) error {
 	return nil
 }
 
-func (InvoiceDAO *InvoiceDAO) FindByCondition(condition string) ([]models.InvoiceModel, error) {
+func (InvoiceDAO InvoiceDAO) FindByCondition(condition string) ([]models.InvoiceModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Invoices " + condition
+	query := "SELECT * FROM invoices " + condition
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err

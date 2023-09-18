@@ -25,10 +25,10 @@ CREATE TABLE Users (
 );
 */
 
-func (UserDAO *UserDAO) Create(user models.UserModel) int {
+func (UserDAO UserDAO) Create(user models.UserModel) int {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "INSERT INTO Users (role_id, user_name, email, password, avatar, token, phone, address) values (?,?,?,?,?,?,?,?)"
+	query := "INSERT INTO users (role_id, user_name, email, password, avatar, token, phone, address) values (?,?,?,?,?,?,?,?)"
 	result, err := db.Exec(query, user.RoleId, user.Username, user.Email, user.Password, user.Avatar, user.Token, user.Phone, user.Address)
 	if err != nil {
 		log.Fatal(err)
@@ -38,10 +38,10 @@ func (UserDAO *UserDAO) Create(user models.UserModel) int {
 
 }
 
-func (UserDAO *UserDAO) FindAll() ([]models.UserModel, error) {
+func (UserDAO UserDAO) FindAll() ([]models.UserModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Users"
+	query := "SELECT * FROM users"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
@@ -59,10 +59,10 @@ func (UserDAO *UserDAO) FindAll() ([]models.UserModel, error) {
 	return Users, nil
 }
 
-func (UserDAO *UserDAO) Update(user models.UserModel) error {
+func (UserDAO UserDAO) Update(user models.UserModel) error {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "UPDATE Users SET role_id =?, user_name =?, email =?, password =?, avatar =?, token =?, phone =?, address =? WHERE user_id =?"
+	query := "UPDATE users SET role_id =?, user_name =?, email =?, password =?, avatar =?, token =?, phone =?, address =? WHERE user_id =?"
 	_, err := db.Exec(query, user.RoleId, user.Username, user.Email, user.Password, user.Avatar, user.Token, user.Phone, user.Address, user.UserId)
 	if err != nil {
 		return err
@@ -70,10 +70,10 @@ func (UserDAO *UserDAO) Update(user models.UserModel) error {
 	return nil
 }
 
-func (UserDAO *UserDAO) Delete(id int) error {
+func (UserDAO UserDAO) Delete(id int) error {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "DELETE FROM Users WHERE user_id =?"
+	query := "DELETE FROM users WHERE user_id =?"
 	_, err := db.Exec(query, id)
 	if err != nil {
 		return err
@@ -81,10 +81,10 @@ func (UserDAO *UserDAO) Delete(id int) error {
 	return nil
 }
 
-func (UserDAO *UserDAO) FindById(id int) (models.UserModel, error) {
+func (UserDAO UserDAO) FindById(id int) (models.UserModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Users WHERE user_id =?"
+	query := "SELECT * FROM users WHERE user_id =?"
 	var user models.UserModel
 	if err := db.QueryRow(query, id).Scan(&user.UserId, &user.RoleId, &user.Username, &user.Email, &user.Password, &user.Avatar, &user.Token, &user.Phone, &user.Address, &user.CreatedAt); err != nil {
 		return user, nil
@@ -92,10 +92,10 @@ func (UserDAO *UserDAO) FindById(id int) (models.UserModel, error) {
 	return user, nil
 }
 
-func (UserDAO *UserDAO) FindByCondition(condition string) ([]models.UserModel, error) {
+func (UserDAO UserDAO) FindByCondition(condition string) ([]models.UserModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Users " + condition
+	query := "SELECT * FROM users " + condition
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err

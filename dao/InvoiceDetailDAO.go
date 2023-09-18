@@ -9,10 +9,10 @@ import (
 type InvoiceDetailDAO struct {
 }
 
-func (InvoiceDetailDAO *InvoiceDetailDAO) FindById(id int) (models.InvoiceDetailModel, error) {
+func (InvoiceDetailDAO InvoiceDetailDAO) FindById(id int) (models.InvoiceDetailModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Invoice_Detail WHERE product_id = ? AND invoice_id = ?"
+	query := "SELECT * FROM invoice_detail WHERE product_id = ? AND invoice_id = ?"
 	var invoiceDetail models.InvoiceDetailModel
 	if err := db.QueryRow(query, id).Scan(&invoiceDetail.ProductId, &invoiceDetail.InvoiceId, &invoiceDetail.Quantity, &invoiceDetail.ProductPrice); err != nil {
 		return invoiceDetail, err
@@ -20,10 +20,10 @@ func (InvoiceDetailDAO *InvoiceDetailDAO) FindById(id int) (models.InvoiceDetail
 	return invoiceDetail, nil
 }
 
-func (InvoiceDetailDAO *InvoiceDetailDAO) Create(invoiceDetail models.InvoiceDetailModel) error {
+func (InvoiceDetailDAO InvoiceDetailDAO) Create(invoiceDetail models.InvoiceDetailModel) error {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "INSERT INTO Invoice_Detail(product_id, invoice_id, quantity, product_price) VALUES (?, ?, ?, ?)"
+	query := "INSERT INTO invoice_detail(product_id, invoice_id, quantity, product_price) VALUES (?, ?, ?, ?)"
 	_, err := db.Exec(query, invoiceDetail.ProductId, invoiceDetail.InvoiceId, invoiceDetail.Quantity, invoiceDetail.ProductPrice)
 	if err != nil {
 		return err
@@ -39,10 +39,10 @@ func ScanToInvoiceDetail(rows *sql.Rows) (*models.InvoiceDetailModel, error) {
 	return InvoiceDetail, nil
 }
 
-func (InvoiceDetailDAO *InvoiceDetailDAO) FindAll() ([]models.InvoiceDetailModel, error) {
+func (InvoiceDetailDAO InvoiceDetailDAO) FindAll() ([]models.InvoiceDetailModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Invoice_Detail"
+	query := "SELECT * FROM invoice_detail"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
@@ -59,10 +59,10 @@ func (InvoiceDetailDAO *InvoiceDetailDAO) FindAll() ([]models.InvoiceDetailModel
 	return InvoiceDetails, nil
 }
 
-func (InvoiceDetailDAO *InvoiceDetailDAO) Update(invoiceDetail models.InvoiceDetailModel) error {
+func (InvoiceDetailDAO InvoiceDetailDAO) Update(invoiceDetail models.InvoiceDetailModel) error {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "UPDATE Invoice_Detail SET quantity = ?, product_price = ? WHERE invoice_id = ? AND product_id = ?"
+	query := "UPDATE invoice_detail SET quantity = ?, product_price = ? WHERE invoice_id = ? AND product_id = ?"
 	_, err := db.Exec(query, invoiceDetail.Quantity, invoiceDetail.ProductPrice, invoiceDetail.InvoiceId, invoiceDetail.ProductId)
 	if err != nil {
 		return err
@@ -70,10 +70,10 @@ func (InvoiceDetailDAO *InvoiceDetailDAO) Update(invoiceDetail models.InvoiceDet
 	return nil
 }
 
-func (InvoiceDetailDAO *InvoiceDetailDAO) Delete(invoiceId int, productId int) error {
+func (InvoiceDetailDAO InvoiceDetailDAO) Delete(invoiceId int, productId int) error {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "DELETE FROM Invoice_Detail WHERE invoice_id = ? AND product_id = ?"
+	query := "DELETE FROM invoice_detail WHERE invoice_id = ? AND product_id = ?"
 	_, err := db.Exec(query, invoiceId, productId)
 	if err != nil {
 		return err
@@ -81,10 +81,10 @@ func (InvoiceDetailDAO *InvoiceDetailDAO) Delete(invoiceId int, productId int) e
 	return nil
 }
 
-func (InvoiceDetailDAO *InvoiceDetailDAO) FindByCondition(condition string) ([]models.InvoiceDetailModel, error) {
+func (InvoiceDetailDAO InvoiceDetailDAO) FindByCondition(condition string) ([]models.InvoiceDetailModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Invoice_Detail " + condition
+	query := "SELECT * FROM invoice_detail " + condition
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err

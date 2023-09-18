@@ -22,7 +22,7 @@ CREATE TABLE `carts` (
 )
 */
 
-func (c *CartDAO) Create(cart models.CartModel) (int, error) {
+func (c CartDAO) Create(cart models.CartModel) (int, error) {
 	db := config.GetConnection()
 	defer db.Close()
 	stmt, err := db.Prepare("INSERT INTO carts (user_id, product_id, quantity) VALUES (?,?,?)")
@@ -41,7 +41,7 @@ func (c *CartDAO) Create(cart models.CartModel) (int, error) {
 	return int(id), nil
 }
 
-func (c *CartDAO) FindAll() ([]models.CartModel, error) {
+func (c CartDAO) FindAll() ([]models.CartModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
 	var carts []models.CartModel
@@ -61,7 +61,7 @@ func (c *CartDAO) FindAll() ([]models.CartModel, error) {
 	return carts, nil
 }
 
-func (c *CartDAO) FindById(userId int, productId int) (models.CartModel, error) {
+func (c CartDAO) FindById(userId int, productId int) (models.CartModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
 	var cart models.CartModel
@@ -72,7 +72,7 @@ func (c *CartDAO) FindById(userId int, productId int) (models.CartModel, error) 
 	return cart, nil
 }
 
-func (c *CartDAO) Update(cart models.CartModel) error {
+func (c CartDAO) Update(cart models.CartModel) error {
 	db := config.GetConnection()
 	defer db.Close()
 	stmt, err := db.Prepare("UPDATE carts SET quantity =? WHERE user_id =? AND product_id =?")
@@ -87,7 +87,7 @@ func (c *CartDAO) Update(cart models.CartModel) error {
 	return nil
 }
 
-func (c *CartDAO) Delete(userId int, productId int) error {
+func (c CartDAO) Delete(userId int, productId int) error {
 	db := config.GetConnection()
 	defer db.Close()
 	stmt, err := db.Prepare("DELETE FROM carts WHERE user_id =? AND product_id =?")
@@ -102,7 +102,7 @@ func (c *CartDAO) Delete(userId int, productId int) error {
 	return nil
 }
 
-func (c *CartDAO) FindByCondition(condition string) ([]models.CartModel, error) {
+func (c CartDAO) FindByCondition(condition string) ([]models.CartModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
 	var carts []models.CartModel

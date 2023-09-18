@@ -9,10 +9,10 @@ import (
 type RoleDAO struct {
 }
 
-func (RoleDAO *RoleDAO) Create(role models.RoleModel) int {
+func (RoleDAO RoleDAO) Create(role models.RoleModel) int {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "INSERT INTO Role (role_name) values (?)"
+	query := "INSERT INTO role (role_name) values (?)"
 	result, err := db.Exec(query, role.RoleName)
 	if err != nil {
 		log.Fatal(err)
@@ -22,7 +22,7 @@ func (RoleDAO *RoleDAO) Create(role models.RoleModel) int {
 
 }
 
-func (RoleDAO *RoleDAO) FindAll() ([]models.RoleModel, error) {
+func (RoleDAO RoleDAO) FindAll() ([]models.RoleModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
 	query := "SELECT * FROM role"
@@ -43,7 +43,7 @@ func (RoleDAO *RoleDAO) FindAll() ([]models.RoleModel, error) {
 	return Role, nil
 }
 
-func (RoleDAO *RoleDAO) FindById(id int) (models.RoleModel, error) {
+func (RoleDAO RoleDAO) FindById(id int) (models.RoleModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
 	query := "SELECT * FROM role WHERE role_id =?"
@@ -56,7 +56,7 @@ func (RoleDAO *RoleDAO) FindById(id int) (models.RoleModel, error) {
 	return role, nil
 }
 
-func (RoleDAO *RoleDAO) Update(role models.RoleModel) error {
+func (RoleDAO RoleDAO) Update(role models.RoleModel) error {
 	db := config.GetConnection()
 	defer db.Close()
 	query := "UPDATE role SET role_name =? WHERE role_id =?"
@@ -67,7 +67,7 @@ func (RoleDAO *RoleDAO) Update(role models.RoleModel) error {
 	return nil
 }
 
-func (RoleDAO *RoleDAO) Delete(id int) error {
+func (RoleDAO RoleDAO) Delete(id int) error {
 	db := config.GetConnection()
 	defer db.Close()
 	query := "DELETE FROM role WHERE role_id =?"
@@ -78,7 +78,7 @@ func (RoleDAO *RoleDAO) Delete(id int) error {
 	return nil
 }
 
-func (RoleDAO *RoleDAO) FindByCondition(condition string) ([]models.RoleModel, error) {
+func (RoleDAO RoleDAO) FindByCondition(condition string) ([]models.RoleModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
 	query := "SELECT * FROM role WHERE " + condition

@@ -24,10 +24,10 @@ CREATE TABLE Products (
 );
 */
 
-func (ProductDAO *ProductDAO) Create(product models.ProductModel) int {
+func (ProductDAO ProductDAO) Create(product models.ProductModel) int {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "INSERT INTO Products (category_id, product_name, description, price) values (?,?,?,?)"
+	query := "INSERT INTO products (category_id, product_name, description, price) values (?,?,?,?)"
 	result, err := db.Exec(query, product.CategoryId, product.ProductName, product.Description, product.Price)
 	if err != nil {
 		log.Fatal(err)
@@ -36,10 +36,10 @@ func (ProductDAO *ProductDAO) Create(product models.ProductModel) int {
 	return int(id)
 }
 
-func (ProductDAO *ProductDAO) FindAll() ([]models.ProductModel, error) {
+func (ProductDAO ProductDAO) FindAll() ([]models.ProductModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Products"
+	query := "SELECT * FROM products"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
@@ -54,10 +54,10 @@ func (ProductDAO *ProductDAO) FindAll() ([]models.ProductModel, error) {
 	return Products, nil
 }
 
-func (ProductDAO *ProductDAO) FindById(id int) (models.ProductModel, error) {
+func (ProductDAO ProductDAO) FindById(id int) (models.ProductModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Products WHERE product_id = ?"
+	query := "SELECT * FROM products WHERE product_id = ?"
 	var product models.ProductModel
 	err := db.QueryRow(query, id).Scan(&product.ProductId, &product.CategoryId, &product.ProductName, &product.Description, &product.Price, &product.CreatedAt, &product.UpdatedAt, &product.DeletedAt, &product.IsDeleted)
 	if err != nil {
@@ -66,10 +66,10 @@ func (ProductDAO *ProductDAO) FindById(id int) (models.ProductModel, error) {
 	return product, nil
 }
 
-func (ProductDAO *ProductDAO) Update(product models.ProductModel) error {
+func (ProductDAO ProductDAO) Update(product models.ProductModel) error {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "UPDATE Products SET category_id = ?, product_name = ?, description = ?, price = ?, deleted_at = ?, is_deleted = ? WHERE product_id = ?"
+	query := "UPDATE products SET category_id = ?, product_name = ?, description = ?, price = ?, deleted_at = ?, is_deleted = ? WHERE product_id = ?"
 	_, err := db.Exec(query, product.CategoryId, product.ProductName, product.Description, product.Price, product.DeletedAt, product.IsDeleted, product.ProductId)
 	if err != nil {
 		return err
@@ -77,10 +77,10 @@ func (ProductDAO *ProductDAO) Update(product models.ProductModel) error {
 	return nil
 }
 
-func (ProductDAO *ProductDAO) Delete(id int) error {
+func (ProductDAO ProductDAO) Delete(id int) error {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "DELETE FROM Products WHERE product_id = ?"
+	query := "DELETE FROM products WHERE product_id = ?"
 	_, err := db.Exec(query, id)
 	if err != nil {
 		return err
@@ -88,10 +88,10 @@ func (ProductDAO *ProductDAO) Delete(id int) error {
 	return nil
 }
 
-func (ProductDAO *ProductDAO) FindByCondition(condition string) ([]models.ProductModel, error) {
+func (ProductDAO ProductDAO) FindByCondition(condition string) ([]models.ProductModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Products " + condition
+	query := "SELECT * FROM products " + condition
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err

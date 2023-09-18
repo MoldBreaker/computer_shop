@@ -9,10 +9,10 @@ import (
 type ProductImageDAO struct {
 }
 
-func (ProductImageDAO *ProductImageDAO) Create(productImage models.ProductImageModel) int {
+func (ProductImageDAO ProductImageDAO) Create(productImage models.ProductImageModel) int {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "INSERT INTO Product_Images(product_id, link) values(?,?)"
+	query := "INSERT INTO product_images(product_id, link) values(?,?)"
 	result, err := db.Exec(query, productImage.ProductId, productImage.Link)
 
 	if err != nil {
@@ -22,10 +22,10 @@ func (ProductImageDAO *ProductImageDAO) Create(productImage models.ProductImageM
 	return int(id)
 }
 
-func (ProductImageDAO *ProductImageDAO) FindAll() ([]models.ProductImageModel, error) {
+func (ProductImageDAO ProductImageDAO) FindAll() ([]models.ProductImageModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Product_Images"
+	query := "SELECT * FROM product_images"
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
@@ -40,10 +40,10 @@ func (ProductImageDAO *ProductImageDAO) FindAll() ([]models.ProductImageModel, e
 	return ProductImages, nil
 }
 
-func (ProductImageDAO *ProductImageDAO) FindById(id int) (models.ProductImageModel, error) {
+func (ProductImageDAO ProductImageDAO) FindById(id int) (models.ProductImageModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Product_Images WHERE image_id = ?"
+	query := "SELECT * FROM product_images WHERE image_id = ?"
 	var productImage models.ProductImageModel
 	err := db.QueryRow(query, id).Scan(&productImage.ImageId, &productImage.ProductId, &productImage.Link)
 	if err != nil {
@@ -52,10 +52,10 @@ func (ProductImageDAO *ProductImageDAO) FindById(id int) (models.ProductImageMod
 	return productImage, nil
 }
 
-func (ProductImageDAO *ProductImageDAO) Delete(id int) error {
+func (ProductImageDAO ProductImageDAO) Delete(id int) error {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "DELETE FROM Product_Images WHERE image_id =?"
+	query := "DELETE FROM product_images WHERE image_id =?"
 	_, err := db.Exec(query, id)
 	if err != nil {
 		return err
@@ -63,10 +63,10 @@ func (ProductImageDAO *ProductImageDAO) Delete(id int) error {
 	return nil
 }
 
-func (ProductImageDAO *ProductImageDAO) Update(productImage models.ProductImageModel) error {
+func (ProductImageDAO ProductImageDAO) Update(productImage models.ProductImageModel) error {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "UPDATE Product_Images SET product_id =?, link =? WHERE image_id =?"
+	query := "UPDATE product_images SET product_id =?, link =? WHERE image_id =?"
 	_, err := db.Exec(query, productImage.ProductId, productImage.Link, productImage.ImageId)
 	if err != nil {
 		return err
@@ -74,10 +74,10 @@ func (ProductImageDAO *ProductImageDAO) Update(productImage models.ProductImageM
 	return nil
 }
 
-func (ProductImageDAO *ProductImageDAO) FindByCondition(condition string) ([]models.ProductImageModel, error) {
+func (ProductImageDAO ProductImageDAO) FindByCondition(condition string) ([]models.ProductImageModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Product_Images " + condition
+	query := "SELECT * FROM product_images " + condition
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err

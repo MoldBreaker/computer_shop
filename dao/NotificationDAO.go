@@ -17,10 +17,10 @@ type NotificationDAO struct {
     PRIMARY KEY (notification_id)
 );*/
 
-func (NotificationDAO *NotificationDAO) Create(notification models.NotificationModel) int {
+func (NotificationDAO NotificationDAO) Create(notification models.NotificationModel) int {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "INSERT INTO Notifications (content, user_id) values (?, ?)"
+	query := "INSERT INTO notifications (content, user_id) values (?, ?)"
 	result, err := db.Exec(query, notification.Content, notification.UserId)
 	if err != nil {
 		log.Fatal(err)
@@ -29,10 +29,10 @@ func (NotificationDAO *NotificationDAO) Create(notification models.NotificationM
 	return int(id)
 }
 
-func (NotificationDAO *NotificationDAO) FindAll() ([]models.NotificationModel, error) {
+func (NotificationDAO NotificationDAO) FindAll() ([]models.NotificationModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Notifications"
+	query := "SELECT * FROM notifications"
 	rows, err := db.Query(query)
 	defer rows.Close()
 	if err != nil {
@@ -50,10 +50,10 @@ func (NotificationDAO *NotificationDAO) FindAll() ([]models.NotificationModel, e
 	return notifications, nil
 }
 
-func (NotificationDAO *NotificationDAO) FindById(id int) (models.NotificationModel, error) {
+func (NotificationDAO NotificationDAO) FindById(id int) (models.NotificationModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Notifications WHERE notification_id = ?"
+	query := "SELECT * FROM notifications WHERE notification_id = ?"
 	var notification models.NotificationModel
 	err := db.QueryRow(query, id).Scan(&notification.NotificationId, &notification.Content, &notification.CreatedAt, notification.UserId)
 	if err != nil {
@@ -62,10 +62,10 @@ func (NotificationDAO *NotificationDAO) FindById(id int) (models.NotificationMod
 	return notification, nil
 }
 
-func (NotificationDAO *NotificationDAO) Update(notification models.NotificationModel) error {
+func (NotificationDAO NotificationDAO) Update(notification models.NotificationModel) error {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "UPDATE Notifications SET content = ? WHERE notification_id = ?"
+	query := "UPDATE notifications SET content = ? WHERE notification_id = ?"
 	_, err := db.Exec(query, notification.Content, notification.NotificationId)
 	if err != nil {
 		return err
@@ -73,10 +73,10 @@ func (NotificationDAO *NotificationDAO) Update(notification models.NotificationM
 	return nil
 }
 
-func (NotificationDAO *NotificationDAO) Delete(id int) error {
+func (NotificationDAO NotificationDAO) Delete(id int) error {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "DELETE FROM Notifications WHERE notification_id = ?"
+	query := "DELETE FROM notifications WHERE notification_id = ?"
 	_, err := db.Exec(query, id)
 	if err != nil {
 		return err
@@ -84,10 +84,10 @@ func (NotificationDAO *NotificationDAO) Delete(id int) error {
 	return nil
 }
 
-func (NotificationDAO *NotificationDAO) FindByCondition(condition string) ([]models.NotificationModel, error) {
+func (NotificationDAO NotificationDAO) FindByCondition(condition string) ([]models.NotificationModel, error) {
 	db := config.GetConnection()
 	defer db.Close()
-	query := "SELECT * FROM Notifications " + condition
+	query := "SELECT * FROM notifications " + condition
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
